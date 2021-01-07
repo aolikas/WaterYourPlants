@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="100"
+    android:orientation="vertical"
+    tools:context=".Auth.StartActivity">
+
+    <ImageView
+        android:id="@+id/img_start_registration"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="70"
+        android:src="@drawable/registration_icon"
+        tools:ignore="ContentDescription" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="30"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/start_btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/blue"
+            android:text="@string/btn_login"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white"
+            app:cornerRadius="15dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/start_btn_forgot_password"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/start_btn_login"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/btn_forgot_password"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/gray" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/start_btn_register"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/start_btn_login"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/btn_register"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/orange" />
+    </RelativeLayout>
+
+</LinearLayout>
