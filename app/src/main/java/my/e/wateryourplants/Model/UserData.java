@@ -11,6 +11,8 @@ public class UserData {
     private String userSensorName;
     private String userSensorDescription;
     private String userSensorMoistureCondition;
+    private Float userSensorTemperature;
+
 
     public UserData() {
     }
@@ -64,6 +66,14 @@ public class UserData {
 
     public void setUserSensorMoistureCondition(String userSensorMoistureCondition) {
         this.userSensorMoistureCondition = userSensorMoistureCondition;
+    }
+
+    public Float getUserSensorTemperature() {
+        return userSensorTemperature;
+    }
+
+    public void setUserSensorTemperature(Float userSensorTemperature) {
+        this.userSensorTemperature = userSensorTemperature;
     }
 
     @Exclude

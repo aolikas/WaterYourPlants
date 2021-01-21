@@ -64,12 +64,14 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         mAdapter = new FirebaseRecyclerAdapter<UserData, MyViewHolder>(options) {
+            @SuppressLint("DefaultLocale")
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull UserData model) {
                 String key = getRef(position).getKey();
                 holder.sensorName.setText("" + model.getUserSensorName());
                 holder.sensorDescription.setText(model.getUserSensorDescription());
                 holder.sensorMoistureCondition.setText(model.getUserSensorMoistureCondition());
+                holder.sensorTemperature.setText(String.format("%.2f",model.getUserSensorTemperature()));
 
                 holder.view.setOnClickListener(new View.OnClickListener() {
                     @Override
