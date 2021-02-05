@@ -13,11 +13,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.slider.Slider;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,15 +41,13 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
 
     private TextView txtSensorId;
     private TextInputEditText etSensorName, etSensorDescription;
-    private Button btnCopy, btnUpdate, btnDelete;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
     private DatabaseReference mRef;
 
     private ClipboardManager mClipboardManager;
 
     private String mKey;
+    private Float mSliderTime = 5.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +55,13 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_sensor_data);
 
         initWidget();
+        initSlider();
 
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
+        initSwitch();
+
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
         assert mUser != null;
         String userId = mUser.getUid();
         mRef = FirebaseDatabase.getInstance().getReference().child("Users")
@@ -75,13 +80,75 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
         etSensorDescription = findViewById(R.id.sensor_data_et_description);
         txtSensorId = findViewById(R.id.sensor_data_txt_id);
 
-        btnCopy = findViewById(R.id.sensor_data_btn_copy);
-        btnUpdate = findViewById(R.id.sensor_data_btn_update);
-        btnDelete = findViewById(R.id.sensor_data_btn_delete);
+
+        Button btnCopy = findViewById(R.id.sensor_data_btn_copy);
+        Button btnUpdate = findViewById(R.id.sensor_data_btn_update);
+        Button btnDelete = findViewById(R.id.sensor_data_btn_delete);
+        Button btnTurnOn = findViewById(R.id.sensor_data_btn_turn_on);
 
         btnCopy.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
+        btnTurnOn.setOnClickListener(this);
+    }
+
+    private void initSlider() {
+        Slider sliderTime = findViewById(R.id.sensor_data_slider_time);
+        sliderTime.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@NonNull Slider slider) {
+                mSliderTime = slider.getValue();
+                Toast.makeText(SensorDataActivity.this, "Value Start" + mSliderTime , Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull Slider slider) {
+                mSliderTime = slider.getValue();
+                Toast.makeText(SensorDataActivity.this, "Value Stop" + mSliderTime , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initSwitch() {
+        SwitchMaterial switchWatering = findViewById(R.id.sensor_data_switch);
+        switchWatering.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked) {
+                    UserData userData = new UserData(null, null,
+                            null,null, true);
+                    Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
+                    mRef.child(mKey).updateChildren(dataUpdate)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()) {
+                                        Toast.makeText(SensorDataActivity.this, "Automatic Watering successfully sets", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(SensorDataActivity.this, "Something is wrong. Setting impossible", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+                } else {
+                    UserData userData = new UserData(null, null,
+                            null,null, false);
+                    Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
+                    mRef.child(mKey).updateChildren(dataUpdate)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()) {
+                                        Toast.makeText(SensorDataActivity.this, "Automatic Watering successfully sets", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(SensorDataActivity.this, "Something is wrong. Setting impossible", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+
+            }
+        });
     }
 
     private void getSensorData() {
@@ -119,7 +186,29 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
             case R.id.sensor_data_btn_delete:
                 deleteSensor();
                 break;
+            case R.id.sensor_data_btn_turn_on:
+                sendSliderTime();
+                break;
         }
+    }
+
+    private void sendSliderTime() {
+
+        UserData userData = new UserData(null, null,
+                null, mSliderTime, null);
+        Map<String, Object> dataUpdate = userData.toMapSensorWateringTime();
+        mRef.child(mKey).updateChildren(dataUpdate)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(SensorDataActivity.this, "Watering duration successfully sets", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SensorDataActivity.this, "Something is wrong. Setting impossible", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
     }
 
     private void copySensorId() {
@@ -147,7 +236,7 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                             Toast.makeText(SensorDataActivity.this, "Sensor Data updated", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SensorDataActivity.this, MainActivity.class));
                         } else {
-                            Toast.makeText(SensorDataActivity.this, "", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SensorDataActivity.this, "Something is wrong. Updating impossible", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -43,5 +43,11 @@
     <string name="dialog_create">Create</string>
     <string name="sensor_data_dialog_delete_msg">Are you sure you want to delete this sensor?</string>
     <string name="sensor_data_dialog_delete_positive_button">Delete</string>
+    <string name="sensor_data_btn_copy_sensor_id">Copy Sensor Id</string>
+    <string name="sensor_data_watering_title">Watering</string>
+    <string name="sensor_data_btn_turn_on">turn pump on</string>
+    <string name="sensor_data_watering_duration">set a duration in seconds</string>
+    <string name="sensor_data_watering_automatic">Automatic Watering</string>
+    <string name="sensor_data_editing_title">Editing</string>
 
 </resources>

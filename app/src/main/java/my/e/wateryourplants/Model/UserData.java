@@ -12,6 +12,8 @@ public class UserData {
     private String userSensorDescription;
     private String userSensorMoistureCondition;
     private Float userSensorTemperature;
+    private Float userSensorPumpWateringTime;
+    private Boolean userSensorPumpWateringAutomatic;
 
 
     public UserData() {
@@ -26,6 +28,17 @@ public class UserData {
         this.userSensorName = userSensorName;
         this.userSensorDescription = userSensorDescription;
         this.userSensorMoistureCondition = userSensorMoistureCondition;
+    }
+
+
+    public UserData(String userSensorName, String userSensorDescription,
+                    String userSensorMoistureCondition, Float userSensorPumpWateringTime,
+                    Boolean userSensorPumpWateringAutomatic) {
+        this.userSensorName = userSensorName;
+        this.userSensorDescription = userSensorDescription;
+        this.userSensorMoistureCondition = userSensorMoistureCondition;
+        this.userSensorPumpWateringTime = userSensorPumpWateringTime;
+        this.userSensorPumpWateringAutomatic = userSensorPumpWateringAutomatic;
     }
 
     public String getUserName() {
@@ -76,6 +89,22 @@ public class UserData {
         this.userSensorTemperature = userSensorTemperature;
     }
 
+    public Float getUserSensorPumpWateringTime() {
+        return userSensorPumpWateringTime;
+    }
+
+    public void setUserSensorPumpWateringTime(Float userSensorPumpWateringTime) {
+        this.userSensorPumpWateringTime = userSensorPumpWateringTime;
+    }
+
+    public Boolean getUserSensorPumpWateringAutomatic() {
+        return userSensorPumpWateringAutomatic;
+    }
+
+    public void setUserSensorPumpWateringAutomatic(Boolean userSensorPumpWateringAutomatic) {
+        this.userSensorPumpWateringAutomatic = userSensorPumpWateringAutomatic;
+    }
+
     @Exclude
     public Map<String, Object> toMapUserNameEmail() {
         HashMap<String, Object> result = new HashMap<>();
@@ -89,6 +118,20 @@ public class UserData {
         HashMap<String, Object> result = new HashMap<>();
         result.put("userSensorName", userSensorName);
         result.put("userSensorDescription", userSensorDescription);
+        return result;
+    }
+
+    @Exclude
+    public Map<String, Object> toMapSensorWateringTime() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userSensorPumpWateringTime", userSensorPumpWateringTime);
+        return result;
+    }
+
+    @Exclude
+    public Map<String, Object> toMapSensorWateringAutomatic() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userSensorPumpWateringAutomatic", userSensorPumpWateringAutomatic);
         return result;
     }
 }

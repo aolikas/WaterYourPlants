@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_account_title"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="5dp"
         android:text="@string/user_account_id_title"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_account_id"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
         android:text="@string/user_account_btn_copy"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -66,6 +66,8 @@
         android:inputType="textEmailAddress"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
+
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/user_account_btn_update"
         android:layout_width="match_parent"
@@ -87,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_account_btn_update"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:backgroundTint="@color/red"
         android:text="@string/user_account_btn_delete"
