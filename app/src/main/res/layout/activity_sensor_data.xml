@@ -18,7 +18,9 @@
             android:layout_margin="8dp"
             app:cardElevation="8dp"
             app:strokeWidth="1dp"
-            app:strokeColor="@color/gray">
+            app:strokeColor="@color/gray"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -96,7 +98,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                 <com.google.android.material.slider.Slider
-                    android:id="@+id/sensor_data_slider_time"
+                    android:id="@+id/sensor_data_slider_duration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -105,21 +107,6 @@
                     android:stepSize="5.0"
                     android:valueFrom="5.0"
                     android:valueTo="30.0" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/sensor_data_btn_turn_on"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="10dp"
-                    android:backgroundTint="@color/blue"
-                    android:text="@string/sensor_data_btn_turn_on"
-                    android:textAllCaps="true"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/white"
-                    app:cornerRadius="15dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -178,7 +165,6 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
-                    android:focusable="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -187,7 +173,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:focusable="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
 

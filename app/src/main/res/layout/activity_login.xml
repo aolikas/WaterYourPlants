@@ -13,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:gravity="center"
         android:hint="@string/et_hint_email"
         android:importantForAutofill="no"
@@ -25,6 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:gravity="center"
         android:hint="@string/et_hint_password"
         android:importantForAutofill="no"
@@ -32,12 +36,23 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColorHint="@color/orange" />
 
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/login_cb_remember_me"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/gray"
+        android:text="@string/cb_remember_me"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:backgroundTint="@color/blue"
         android:text="@string/btn_login"

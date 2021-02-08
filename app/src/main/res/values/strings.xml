@@ -49,5 +49,6 @@
     <string name="sensor_data_watering_duration">set a duration in seconds</string>
     <string name="sensor_data_watering_automatic">Automatic Watering</string>
     <string name="sensor_data_editing_title">Editing</string>
+    <string name="cb_remember_me">Remember me</string>
 
 </resources>
