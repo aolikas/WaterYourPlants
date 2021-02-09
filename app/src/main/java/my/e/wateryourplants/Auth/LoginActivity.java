@@ -33,13 +33,14 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private String mEmail, mPassword;
-    private Boolean mIsLogin;
+    private Boolean mSaveLogin;
     private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mPreferencesEditor;
 
     private static final String SHARED_PREF_NAME = "checkBoxRememberMe";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
-    private static final String KEY_IS_LOGIN = "is_login";
+    private static final String KEY_SAVE_LOGIN = "save_login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,15 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         initWidgets();
         mAuth = FirebaseAuth.getInstance();
+        mPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+        mPreferencesEditor = mPreferences.edit();
+
+        mSaveLogin = mPreferences.getBoolean(KEY_SAVE_LOGIN, false);
+        if(mSaveLogin) {
+            etEmail.setText(mPreferences.getString(KEY_EMAIL, ""));
+            etPassword.setText(mPreferences.getString(KEY_PASSWORD, ""));
+            cbRememberMe.setChecked(true);
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,17 +72,12 @@ public class LoginActivity extends AppCompatActivity {
                     etEmail.setError("Please provide valid email");
                     etEmail.requestFocus();
                 } else {
-                    if(cbRememberMe.isChecked()) {
-                        mIsLogin = cbRememberMe.isChecked();
-                        mPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = mPreferences.edit();
-                        editor.putString(KEY_EMAIL, mEmail);
-                        editor.putString(KEY_PASSWORD, mPassword);
-                        editor.putBoolean(KEY_IS_LOGIN, mIsLogin);
-                        editor.apply();
-                        Toast.makeText(LoginActivity.this, "Data saved in SP", Toast.LENGTH_SHORT).show();
+                    if (cbRememberMe.isChecked()) {
+                        stayLogIn();
                     } else {
-                        mPreferences.edit().clear().apply();
+                      //  removeLogIn();
+                        mPreferencesEditor.clear();
+                        mPreferencesEditor.apply();
                     }
 
                     loginUser(mEmail, mPassword);
@@ -80,22 +85,39 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        getPreferencesData();
     }
 
-    public void getPreferencesData() {
-        mPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
-        String email = mPreferences.getString(KEY_EMAIL, "");
-        etEmail.setText(email);
 
-        String password = mPreferences.getString(KEY_PASSWORD, "");
+    private void stayLogIn() {
+            mPreferencesEditor.putString(KEY_EMAIL, mEmail);
+            mPreferencesEditor.putString(KEY_PASSWORD, mPassword);
+            mPreferencesEditor.putBoolean(KEY_SAVE_LOGIN, true);
+            mPreferencesEditor.apply();
+            Toast.makeText(LoginActivity.this, "Data saved in SP", Toast.LENGTH_SHORT).show();
+    }
+
+    private void removeLogIn() {
+        mPreferencesEditor = mPreferences.edit();
+        mPreferencesEditor.putString(KEY_EMAIL, "");
+        mPreferencesEditor.putString(KEY_PASSWORD, "");
+        mPreferencesEditor.putBoolean(KEY_SAVE_LOGIN, false);
+        mPreferencesEditor.apply();
+        Toast.makeText(LoginActivity.this, "REmove", Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkedSharedPreferences() {
+        mSaveLogin = mPreferences.getBoolean(KEY_SAVE_LOGIN, true);
+        String email = mPreferences.getString(KEY_EMAIL, "default");
+        String password = mPreferences.getString(KEY_PASSWORD, "default");
+
+        etEmail.setText(email);
         etPassword.setText(password);
 
-        boolean isLogin = mPreferences.getBoolean(KEY_IS_LOGIN, false);
-        cbRememberMe.setChecked(isLogin);
-
-
-
+        if(mSaveLogin) {
+            cbRememberMe.setChecked(true);
+        } else {
+            cbRememberMe.setChecked(false);
+        }
     }
 
     private void loginUser(String email, String password) {

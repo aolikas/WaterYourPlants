@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import my.e.wateryourplants.Auth.LoginActivity;
 import my.e.wateryourplants.Auth.StartActivity;
 import my.e.wateryourplants.Dialogs.SensorCreateDialog;
 import my.e.wateryourplants.Model.UserData;
@@ -37,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private RecyclerView mRecyclerView;
     private FirebaseRecyclerAdapter<UserData, MyViewHolder> mAdapter;
+    private static final String SHARED_PREF_NAME = "checkBoxRememberMe";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_PASSWORD = "password";
+    private static final String KEY_SAVE_LOGIN = "save_login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 openCreateSensorDialog();
             }
         });
+
 
         initRecyclerView();
 
@@ -98,11 +105,15 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+
+
     private void initRecyclerView() {
         mRecyclerView = findViewById(R.id.main_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //   mRecyclerView.setHasFixedSize(true);
     }
+
+
 
     private void openCreateSensorDialog() {
         SensorCreateDialog sensorCreateDialog = new SensorCreateDialog();
@@ -118,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
