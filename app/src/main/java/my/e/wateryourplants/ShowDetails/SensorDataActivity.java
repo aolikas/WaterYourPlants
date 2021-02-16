@@ -2,15 +2,21 @@ package my.e.wateryourplants.ShowDetails;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +49,7 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
     private TextView txtSensorId;
     private TextInputEditText etSensorName, etSensorDescription;
     private Slider slWateringDuration;
-    private SwitchMaterial swAutomaticWatering;
+    private SwitchMaterial swAutomaticWatering, swNotifyCondition;
 
     private DatabaseReference mRef;
 
@@ -51,7 +57,14 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
 
     private String mKey;
     private Float mSliderDuration;
-    private Boolean mSwitchSaveState;
+    private Boolean mSwitchSaveWateringState;
+    private Boolean mSwitchSaveNotifyState;
+
+    private int notificationId = 1;
+    private String mMoistureCondition = "";
+
+    public static final String CHANNEL_ID = "My notification channel";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +82,16 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
 
         mKey = getIntent().getStringExtra("key");
 
+        createNotificationChannel();
+
         getSensorData();
 
         mClipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
         initSlider();
 
-        initSwitch();
+        initAutoWateringSwitch();
+        initNotifyDrySwitch();
 
     }
 
@@ -84,7 +100,8 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
         etSensorDescription = findViewById(R.id.sensor_data_et_description);
         txtSensorId = findViewById(R.id.sensor_data_txt_id);
         slWateringDuration = findViewById(R.id.sensor_data_slider_duration);
-        swAutomaticWatering = findViewById(R.id.sensor_data_switch);
+        swAutomaticWatering = findViewById(R.id.sensor_data_switch_auto_water);
+        swNotifyCondition = findViewById(R.id.sensor_data_switch_notify_condition);
 
         Button btnCopy = findViewById(R.id.sensor_data_btn_copy);
         Button btnUpdate = findViewById(R.id.sensor_data_btn_update);
@@ -105,10 +122,22 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                     etSensorName.setText(userData.getUserSensorName());
                     etSensorDescription.setText(userData.getUserSensorDescription());
                     txtSensorId.setText(mKey);
-                    mSwitchSaveState = userData.getUserSensorPumpWateringAutomatic();
-                    swAutomaticWatering.setChecked(mSwitchSaveState);
+
+                    mSwitchSaveWateringState = userData.getUserSensorPumpWateringAutomatic();
+                    swAutomaticWatering.setChecked(mSwitchSaveWateringState);
+
+                    mSwitchSaveNotifyState = userData.getUserSensorNotifyDryCondition();
+                    swNotifyCondition.setChecked(mSwitchSaveNotifyState);
+
                     mSliderDuration = userData.getUserSensorPumpWateringDuration();
                     slWateringDuration.setValue(mSliderDuration);
+
+                    mMoistureCondition = userData.getUserSensorMoistureCondition();
+                    if(mSwitchSaveNotifyState && mMoistureCondition.equals("Dry")) {
+                        notificationDryCondition(etSensorName.getText().toString());
+                    }
+
+
                 } else {
                     Toast.makeText(SensorDataActivity.this, "Sensor does not exist", Toast.LENGTH_SHORT).show();
                 }
@@ -119,6 +148,40 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                 Toast.makeText(SensorDataActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String name = "My notification";
+            String description = "Notification when plant becomes dry ";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void notificationDryCondition(String sensorName) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_notifications)
+                .setContentTitle("It's time to watering")
+                .setContentText(sensorName + " is dry")
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(notificationId, builder.build());
+
     }
 
     private void initSlider() {
@@ -138,18 +201,18 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    private void initSwitch() {
+    private void initAutoWateringSwitch() {
         swAutomaticWatering.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked) {
-                    mSwitchSaveState = true;
+                    mSwitchSaveWateringState = true;
                     SharedPreferences.Editor editor = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
-                    editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveState);
+                    editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveWateringState);
                     editor.apply();
 
                     UserData userData = new UserData(null,
-                            null,null, mSwitchSaveState);
+                            null,null, mSwitchSaveWateringState, null);
                     Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
                     mRef.child(mKey).updateChildren(dataUpdate)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -164,13 +227,13 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                             });
 
                 } else {
-                    mSwitchSaveState = false;
+                    mSwitchSaveWateringState = false;
                     SharedPreferences.Editor editor = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
-                    editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveState);
+                    editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveWateringState);
                     editor.apply();
 
                     UserData userData = new UserData(null,
-                            null,null, mSwitchSaveState);
+                            null,null, mSwitchSaveWateringState, null);
                     Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
                     mRef.child(mKey).updateChildren(dataUpdate)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -189,6 +252,47 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    private void initNotifyDrySwitch() {
+        swNotifyCondition.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    mSwitchSaveNotifyState = true;
+                    UserData userData = new UserData(null, null, null,
+                            null, mSwitchSaveNotifyState);
+                    Map<String, Object> dataUpdate = userData.toMapSensorNotifyDryCondition();
+                    mRef.child(mKey).updateChildren(dataUpdate)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(SensorDataActivity.this, "Notification successfully sets", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(SensorDataActivity.this, "Something is wrong. Setting impossible", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                } else {
+                    mSwitchSaveNotifyState = false;
+                    UserData userData = new UserData(null, null, null,
+                            null, mSwitchSaveNotifyState);
+                    Map<String, Object> dataUpdate = userData.toMapSensorNotifyDryCondition();
+                    mRef.child(mKey).updateChildren(dataUpdate)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(SensorDataActivity.this, "Notification successfully sets", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(SensorDataActivity.this, "Something is wrong. Setting impossible", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+
+            }
+        });
+    }
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -209,7 +313,7 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
     private void sendSliderDuration() {
 
         UserData userData = new UserData(null,
-                null, mSliderDuration, null);
+                null, mSliderDuration, null, null);
         Map<String, Object> dataUpdate = userData.toMapSensorWateringDuration();
         mRef.child(mKey).updateChildren(dataUpdate)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

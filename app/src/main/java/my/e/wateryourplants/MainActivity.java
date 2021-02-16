@@ -2,12 +2,18 @@ package my.e.wateryourplants;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_SAVE_LOGIN = "save_login";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 holder.sensorDescription.setText(model.getUserSensorDescription());
                 holder.sensorMoistureCondition.setText(model.getUserSensorMoistureCondition());
                 holder.sensorTemperature.setText(String.format("%.2f",model.getUserSensorTemperature()));
-
                 holder.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -119,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         SensorCreateDialog sensorCreateDialog = new SensorCreateDialog();
         sensorCreateDialog.show(getSupportFragmentManager(), "sensor dialog");
     }
+
 
     private void logOutUser() {
         FirebaseAuth.getInstance().signOut();

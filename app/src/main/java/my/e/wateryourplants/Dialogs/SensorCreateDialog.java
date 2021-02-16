@@ -55,7 +55,8 @@ public class SensorCreateDialog extends AppCompatDialogFragment {
                                 .child(userId).child("userSensors");
                         String key = mRef.push().getKey();
 
-                        UserData currentUser = new UserData(name, description, 5.0f, false);
+                        UserData currentUser = new UserData(name, description, 5.0f,
+                                false, false);
                         assert key != null;
                         mRef.child(key).setValue(currentUser);
                     }

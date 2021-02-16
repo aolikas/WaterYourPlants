@@ -14,6 +14,7 @@ public class UserData {
     private Float userSensorTemperature;
     private Float userSensorPumpWateringDuration;
     private Boolean userSensorPumpWateringAutomatic;
+    private Boolean userSensorNotifyDryCondition;
 
 
     public UserData() {
@@ -32,11 +33,13 @@ public class UserData {
 
 
     public UserData(String userSensorName, String userSensorDescription
-            , Float userSensorPumpWateringDuration, Boolean userSensorPumpWateringAutomatic) {
+            , Float userSensorPumpWateringDuration, Boolean userSensorPumpWateringAutomatic,
+                    Boolean userSensorNotifyDryCondition) {
         this.userSensorName = userSensorName;
         this.userSensorDescription = userSensorDescription;
         this.userSensorPumpWateringDuration = userSensorPumpWateringDuration;
         this.userSensorPumpWateringAutomatic = userSensorPumpWateringAutomatic;
+        this.userSensorNotifyDryCondition = userSensorNotifyDryCondition;
     }
 
     public String getUserName() {
@@ -103,6 +106,14 @@ public class UserData {
         this.userSensorPumpWateringAutomatic = userSensorPumpWateringAutomatic;
     }
 
+    public Boolean getUserSensorNotifyDryCondition() {
+        return userSensorNotifyDryCondition;
+    }
+
+    public void setUserSensorNotifyDryCondition(Boolean userSensorNotifyDryCondition) {
+        this.userSensorNotifyDryCondition = userSensorNotifyDryCondition;
+    }
+
     @Exclude
     public Map<String, Object> toMapUserNameEmail() {
         HashMap<String, Object> result = new HashMap<>();
@@ -130,6 +141,13 @@ public class UserData {
     public Map<String, Object> toMapSensorWateringAutomatic() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("userSensorPumpWateringAutomatic", userSensorPumpWateringAutomatic);
+        return result;
+    }
+
+    @Exclude
+    public Map<String, Object> toMapSensorNotifyDryCondition() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userSensorNotifyDryCondition", userSensorNotifyDryCondition);
         return result;
     }
 }
