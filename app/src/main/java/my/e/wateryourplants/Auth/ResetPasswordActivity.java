@@ -3,8 +3,12 @@ package my.e.wateryourplants.Auth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -34,12 +38,25 @@ public class ResetPasswordActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.reset_progress_bar);
         mAuth = FirebaseAuth.getInstance();
 
+
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
                 String txtEmail = etEmail.getText().toString().trim();
-                resetUserPassword(txtEmail);
+                if(TextUtils.isEmpty(txtEmail)) {
+                    Toast.makeText(ResetPasswordActivity.this,
+                            getString(R.string.toast_error_empty_fields), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    hideKeyboard();
+                } else if(!Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches()) {
+                    etEmail.setError(getString(R.string.error_invalid_email));
+                    progressBar.setVisibility(View.GONE);
+                    hideKeyboard();
+                } else {
+                    resetUserPassword(txtEmail);
+                    hideKeyboard();
+                }
             }
         });
     }
@@ -51,13 +68,24 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            Toast.makeText(ResetPasswordActivity.this, "Password send to your email",
+                            Toast.makeText(ResetPasswordActivity.this,
+                                    getString(R.string.toast_reset_success),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(ResetPasswordActivity.this,
-                                    Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                                    Objects.requireNonNull(task.getException()).getMessage(),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    public void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager manager =
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

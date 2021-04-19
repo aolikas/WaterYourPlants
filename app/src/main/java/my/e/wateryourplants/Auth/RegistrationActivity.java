@@ -3,11 +3,13 @@ package my.e.wateryourplants.Auth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -54,14 +56,23 @@ public class RegistrationActivity extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(txtName) || TextUtils.isEmpty(txtEmail)
                         || TextUtils.isEmpty(txtPassword)) {
-                    Toast.makeText(RegistrationActivity.this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistrationActivity.this,
+                            getString(R.string.toast_error_empty_fields), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    hideKeyboard();
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches()) {
-                    etEmail.setError("Please provide valid email");
+                    etEmail.setError(getString(R.string.error_invalid_email));
                     etEmail.requestFocus();
+                    progressBar.setVisibility(View.GONE);
+                    hideKeyboard();
                 } else if (txtPassword.length() < 6) {
-                    Toast.makeText(RegistrationActivity.this, "Password should be at least 6 characters", Toast.LENGTH_SHORT).show();
+                    etPassword.setError(getString(R.string.error_invalid_password));
+                    etPassword.requestFocus();
+                    progressBar.setVisibility(View.GONE);
+                    hideKeyboard();
                 } else {
                     register(txtName, txtEmail, txtPassword);
+                    hideKeyboard();
                 }
             }
         });
@@ -73,7 +84,6 @@ public class RegistrationActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
                             String userId = user.getUid();
@@ -85,18 +95,21 @@ public class RegistrationActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(RegistrationActivity.this, "Registration is successful", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegistrationActivity.this,
+                                                getString(R.string.toast_reg_success), Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     } else {
-                                        Toast.makeText(RegistrationActivity.this, "Failed to register. Try again.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegistrationActivity.this,
+                                                getString(R.string.toast_reg_failed), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                         } else {
-                            Toast.makeText(RegistrationActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegistrationActivity.this,
+                                    Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -111,5 +124,14 @@ public class RegistrationActivity extends AppCompatActivity {
         btnRegistration = findViewById(R.id.reg_btn_registration);
         progressBar = findViewById(R.id.reg_progress_bar);
         progressBar.setVisibility(View.GONE);
+    }
+
+    public void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager manager =
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

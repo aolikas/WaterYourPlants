@@ -52,4 +52,13 @@
     <string name="cb_remember_me">Remember me</string>
     <string name="sensor_data_watering_notify">Notify about dry condition</string>
 
+    <string name="toast_error_empty_fields">Please fill all required fields</string>
+    <string name="toast_reg_success">Registration is successful</string>
+    <string name="toast_reg_failed">Failed to register. Try again.</string>
+
+    <string name="error_invalid_email">Please provide a valid email</string>
+    <string name="error_invalid_password">Password should be at least 6 characters</string>
+    <string name="toast_reset_success">Password send to your email</string>
+
+
 </resources>
