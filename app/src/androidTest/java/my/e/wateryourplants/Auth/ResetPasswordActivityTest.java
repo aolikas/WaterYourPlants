@@ -53,8 +53,11 @@ public class ResetPasswordActivityTest {
     @Test
     public void testEmailEmpty() {
         onView(withId(R.id.reset_progress_bar)).check(matches(not(isDisplayed())));
+
         onView(withId(R.id.reset_et_email)).perform(clearText(), closeSoftKeyboard());
+
         onView(withId(R.id.reset_btn_reset)).perform(click());
+
         onView(withText(R.string.toast_error_empty_fields)).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
         onView(withText(R.string.toast_error_empty_fields)).inRoot(new ToastMatcher())
@@ -65,9 +68,13 @@ public class ResetPasswordActivityTest {
     public void testInvalidEmail() {
         email = "111111";
         onView(withId(R.id.reset_progress_bar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.reset_et_email)).perform(clearText(), typeText(email), closeSoftKeyboard());
+
+        onView(withId(R.id.reset_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.reset_et_email)).check(matches(withText("111111")));
 
         onView(withId(R.id.reset_btn_reset)).perform(click());
+
         onView(withId(R.id.reset_et_email))
                 .check(matches(hasErrorText("Please provide a valid email")))
                 .check(matches(hasFocus()));
@@ -76,7 +83,11 @@ public class ResetPasswordActivityTest {
     @Test
     public void testRegSuccess() {
         onView(withId(R.id.reset_progress_bar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.reset_et_email)).perform(clearText(), typeText(email), closeSoftKeyboard());
+
+        onView(withId(R.id.reset_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.reset_et_email)).check(matches(withText("waterplantstest@gmail.com")));
+
         onView(withId(R.id.reset_btn_reset)).perform(click());
 
         onView(withText(R.string.toast_reset_success)).inRoot(new ToastMatcher())

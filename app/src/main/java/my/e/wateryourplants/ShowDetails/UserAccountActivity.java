@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
+import java.util.Objects;
 
 import my.e.wateryourplants.Auth.StartActivity;
 import my.e.wateryourplants.MainActivity;
@@ -147,8 +148,8 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void updateNewData() {
-        String name = etUserName.getText().toString();
-        String email = etUserEmail.getText().toString();
+        String name = Objects.requireNonNull(etUserName.getText()).toString().trim();
+        String email = Objects.requireNonNull(etUserEmail.getText()).toString().trim();
 
         mUser.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

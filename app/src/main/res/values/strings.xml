@@ -22,8 +22,8 @@
     <string name="fab_description">Add new sensor</string>
 
     <string name="dialog_create_title">Add a new sensor</string>
-    <string name="dialog_create_et_sensor_name">Name</string>
-    <string name="dialog_create_et_sensor_description">Description</string>
+    <string name="dialog_create_et_hint_sensor_name">Name</string>
+    <string name="dialog_create_et_hint_sensor_description">Description</string>
 
 
     <string name="user_account_title">User Account Information</string>
@@ -58,6 +58,7 @@
     <string name="toast_reset_success">Password send to your email</string>
     <string name="toast_login_success">Login is successful</string>
     <string name="toast_login_failed">Login failed</string>
+    <string name="toast_dialog_empty_sensor_name">Please try again and give your sensor a name</string>
 
     <string name="error_invalid_email">Please provide a valid email</string>
     <string name="error_invalid_password">Password should be at least 6 characters</string>

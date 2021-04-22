@@ -104,8 +104,12 @@ public class LoginActivityTest {
         email = "111111";
         onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
 
-        onView(withId(R.id.login_et_email)).perform(clearText(), typeText(email), closeSoftKeyboard());
-        onView(withId(R.id.login_et_password)).perform(clearText(), typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("111111")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("Te$TwAte4")));
 
         onView(withId(R.id.login_btn_login)).perform(click());
         onView(withId(R.id.login_et_email))
@@ -126,8 +130,12 @@ public class LoginActivityTest {
         onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
         onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
 
-        onView(withId(R.id.login_et_email)).perform(clearText(), typeText(email), closeSoftKeyboard());
-        onView(withId(R.id.login_et_password)).perform(clearText(), typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("waterplantstest@gmail.com")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("Te$TwAte4")));
         onView(withId(R.id.login_btn_login)).perform(click());
 
         onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
@@ -141,8 +149,12 @@ public class LoginActivityTest {
         onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
         onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
 
-        onView(withId(R.id.login_et_email)).perform(clearText(), typeText(email), closeSoftKeyboard());
-        onView(withId(R.id.login_et_password)).perform(clearText(), typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("waterplantstest@gmail.com")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("Te$TwAte4")));
 
         onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
         onView(withId(R.id.login_cb_remember_me)).perform(click());

@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, UserAccountActivity.class));
                 return true;
 
-            default:
+                default:
                 return super.onOptionsItemSelected(item);
         }
     }

@@ -1,16 +1,10 @@
 package my.e.wateryourplants.Auth;
 
-import android.os.IBinder;
-import android.view.WindowManager;
 
-
-import androidx.test.espresso.Root;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.hamcrest.Description;
 
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -58,9 +52,9 @@ public class RegistrationActivityTest {
         onView(withId(R.id.reg_et_name)).check(matches(withHint(R.string.et_hint_name)))
                 .check(matches(isEnabled()));
         onView(withId(R.id.reg_et_email)).check(matches(withHint(R.string.et_hint_email)))
-        .check(matches(isEnabled()));
+                .check(matches(isEnabled()));
         onView(withId(R.id.reg_et_password)).check(matches(withHint(R.string.et_hint_password)))
-        .check(matches(isEnabled()));
+                .check(matches(isEnabled()));
     }
 
     @Test
@@ -72,10 +66,13 @@ public class RegistrationActivityTest {
     @Test
     public void testAllViewsEmpty() {
         onView(withId(R.id.reg_progress_bar)).check(matches(not(isDisplayed())));
+
         onView(withId(R.id.reg_et_name)).perform(clearText(), closeSoftKeyboard());
         onView(withId(R.id.reg_et_email)).perform(clearText(), closeSoftKeyboard());
         onView(withId(R.id.reg_et_password)).perform(clearText(), closeSoftKeyboard());
+
         onView(withId(R.id.reg_btn_registration)).perform(click());
+
         onView(withText(R.string.toast_error_empty_fields)).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
         onView(withText(R.string.toast_error_empty_fields)).inRoot(new ToastMatcher())
@@ -86,11 +83,19 @@ public class RegistrationActivityTest {
     public void testInvalidEmail() {
         email = "111111";
         onView(withId(R.id.reg_progress_bar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.reg_et_name)).perform(clearText(), typeText(name), closeSoftKeyboard());
-        onView(withId(R.id.reg_et_email)).perform(clearText(), typeText(email), closeSoftKeyboard());
-        onView(withId(R.id.reg_et_password)).perform(clearText(), typeText(password), closeSoftKeyboard());
+
+        onView(withId(R.id.reg_et_name)).perform(clearText(),
+                typeText(name), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_name)).check(matches(withText("Tom")));
+        onView(withId(R.id.reg_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_email)).check(matches(withText("111111")));
+        onView(withId(R.id.reg_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_password)).check(matches(withText("Te$TwAte4")));
 
         onView(withId(R.id.reg_btn_registration)).perform(click());
+
         onView(withId(R.id.reg_et_email))
                 .check(matches(hasErrorText("Please provide a valid email")))
                 .check(matches(hasFocus()));
@@ -101,11 +106,19 @@ public class RegistrationActivityTest {
     public void testInvalidPassword() {
         password = "11";
         onView(withId(R.id.reg_progress_bar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.reg_et_name)).perform(clearText(), typeText(name), closeSoftKeyboard());
-        onView(withId(R.id.reg_et_email)).perform(clearText(), typeText(email), closeSoftKeyboard());
-        onView(withId(R.id.reg_et_password)).perform(clearText(), typeText(password), closeSoftKeyboard());
+
+        onView(withId(R.id.reg_et_name)).perform(clearText(),
+                typeText(name), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_name)).check(matches(withText("Tom")));
+        onView(withId(R.id.reg_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_email)).check(matches(withText("waterplantstest@gmail.com")));
+        onView(withId(R.id.reg_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_password)).check(matches(withText("11")));
 
         onView(withId(R.id.reg_btn_registration)).perform(click());
+
         onView(withId(R.id.reg_et_password))
                 .check(matches(hasErrorText("Password should be at least 6 characters")))
                 .check(matches(hasFocus()));
@@ -114,16 +127,23 @@ public class RegistrationActivityTest {
     @Test
     public void testRegSuccess() {
         onView(withId(R.id.reg_progress_bar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.reg_et_name)).perform(clearText(), typeText(name), closeSoftKeyboard());
-        onView(withId(R.id.reg_et_email)).perform(clearText(), typeText(email), closeSoftKeyboard());
-        onView(withId(R.id.reg_et_password)).perform(clearText(), typeText(password), closeSoftKeyboard());
+
+        onView(withId(R.id.reg_et_name)).perform(clearText(),
+                typeText(name), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_name)).check(matches(withText("Tom")));
+        onView(withId(R.id.reg_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_email)).check(matches(withText("waterplantstest@gmail.com")));
+        onView(withId(R.id.reg_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_password)).check(matches(withText("Te$TwAte4")));
+
         onView(withId(R.id.reg_btn_registration)).perform(click());
 
         onView(withText(R.string.toast_reg_success)).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
         onView(withText(R.string.toast_reg_success)).inRoot(new ToastMatcher())
                 .check(matches(withText("Registration is successful")));
-
     }
 
 

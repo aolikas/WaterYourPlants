@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/dialog_create_et_sensor_name"
+        android:hint="@string/dialog_create_et_hint_sensor_name"
         android:importantForAutofill="no"
         android:inputType="text"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/dialog_create_et_sensor_description"
+        android:hint="@string/dialog_create_et_hint_sensor_description"
         android:importantForAutofill="no"
         android:inputType="text"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
