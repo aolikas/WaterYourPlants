@@ -1,6 +1,7 @@
 package my.e.wateryourplants.Auth;
 
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith;
 import my.e.wateryourplants.R;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -43,7 +45,7 @@ public class RegistrationActivityTest {
     @Before
     public void setUp() {
         name = "Tom";
-        email = "waterplantstest@gmail.com";
+        email = "waterplantstest@gmail.com"; // this email also will be used in ResetPassword Test
         password = "Te$TwAte4";
     }
 
@@ -146,6 +148,101 @@ public class RegistrationActivityTest {
                 .check(matches(withText("Registration is successful")));
     }
 
+    @Test
+    public void testRegisterAndLogOut() throws InterruptedException {
+        name = "Sam";
+        email = "test@test.ru";
+        password = "1234567";
+
+        // set name, email, password to editText
+        onView(withId(R.id.reg_progress_bar)).check(matches(not(isDisplayed())));
+
+        onView(withId(R.id.reg_et_name)).perform(clearText(),
+                typeText(name), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+
+        // click Register button
+        onView(withId(R.id.reg_btn_registration)).perform(click());
+
+        //check Toast - Registration success
+        onView(withText(R.string.toast_reg_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_reg_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Registration is successful")));
+
+        // find a menu
+        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
+
+        Thread.sleep(2000);
+
+        // click Log out button
+        onView(withText(R.string.menu_main_log_out)).perform(click());
+
+        //check Toast - Log out success
+        onView(withText(R.string.toast_menu_log_out)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_menu_log_out)).inRoot(new ToastMatcher())
+                .check(matches(withText("Logged Out")));
+    }
+
+    @Test
+    public void testRegisterAndDeleteAccount() throws InterruptedException {
+        name = "Sally";
+        email = "test@test.rt";
+        password = "1234567";
+
+        // set name, email, password to editText
+        onView(withId(R.id.reg_progress_bar)).check(matches(not(isDisplayed())));
+
+        onView(withId(R.id.reg_et_name)).perform(clearText(),
+                typeText(name), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.reg_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+
+        // click Register button
+        onView(withId(R.id.reg_btn_registration)).perform(click());
+
+        //check Toast - Registration success
+        onView(withText(R.string.toast_reg_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_reg_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Registration is successful")));
+
+        // find a menu
+        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
+
+        Thread.sleep(2000);
+
+        // click Log out button
+        onView(withText(R.string.menu_main_account_details)).perform(click());
+
+        // check  name and email in EditText
+        onView(withId(R.id.user_account_et_name)).check(matches(withText(name)));
+        onView(withId(R.id.user_account_et_email)).check(matches(withText(email)));
+
+        //click Delete Button
+        onView(withId(R.id.user_account_btn_delete_user)).perform(click());
+
+        Thread.sleep(2000);
+
+        //find a Delete Button in dialog
+        onView(withText(R.string.user_account_dialog_delete_positive_button))
+                .check(matches(withText("Delete")));
+
+        //click a Delete Button
+        onView(withText(R.string.user_account_dialog_delete_positive_button)).perform(click());
+
+        onView(withText(R.string.toast_dialog_delete_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+
+        onView(withText(R.string.toast_dialog_delete_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Account Deleted")));
+    }
 
     @After
     public void tearDown() {

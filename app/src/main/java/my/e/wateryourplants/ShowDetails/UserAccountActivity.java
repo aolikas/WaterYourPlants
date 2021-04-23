@@ -11,7 +11,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,6 +111,7 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.user_account_btn_update:
                 updateNewData();
+                hideKeyboard();
                 break;
             case R.id.user_account_btn_copy:
                 copyUserId();
@@ -127,7 +130,7 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                 user.delete();
                 mRef.removeValue();
                 Toast.makeText(UserAccountActivity.this,
-                        "Account Deleted", Toast.LENGTH_SHORT).show();
+                        getString(R.string.toast_dialog_delete_success), Toast.LENGTH_SHORT).show();
                 Intent intent = (new Intent(UserAccountActivity.this, StartActivity.class));
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -151,28 +154,40 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         String name = Objects.requireNonNull(etUserName.getText()).toString().trim();
         String email = Objects.requireNonNull(etUserEmail.getText()).toString().trim();
 
-        mUser.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this,
+                    getString(R.string.error_invalid_email), Toast.LENGTH_SHORT).show();
+            etUserEmail.setError(getString(R.string.error_invalid_email));
+            etUserEmail.requestFocus();
+        } else {
+            mUser.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
 
-                    UserData userData = new UserData(name, email);
+                        UserData userData = new UserData(name, email);
 
-                    Map<String, Object> dataUpdate = userData.toMapUserNameEmail();
-                    mRef.updateChildren(dataUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                startActivity(new Intent(UserAccountActivity.this, MainActivity.class));
-                                Toast.makeText(UserAccountActivity.this, "Data updated.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(UserAccountActivity.this, "Something is wrong.", Toast.LENGTH_SHORT).show();
+                        Map<String, Object> dataUpdate = userData.toMapUserNameEmail();
+                        mRef.updateChildren(dataUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    startActivity(new Intent(UserAccountActivity.this,
+                                            MainActivity.class));
+                                    Toast.makeText(UserAccountActivity.this,
+                                            getString(R.string.toast_update_success),
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(UserAccountActivity.this,
+                                            getString(R.string.toast_update_failed),
+                                            Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void copyUserId() {
@@ -180,5 +195,14 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         ClipData mClipData = ClipData.newPlainText("id", userId);
         mClipboardManager.setPrimaryClip(mClipData);
         Toast.makeText(this, "User Id copied to Clipboard.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager manager =
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
