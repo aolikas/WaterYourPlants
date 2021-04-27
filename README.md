@@ -6,4 +6,4 @@ Android App for receiving data from sensors and controlling them.
 Arduino sketch for moisture and temperature sensor. 
 Arduino sketch for controlling water pump. All Arduino sketches locate in a different folder (WaterYourPlantsAduino). 
 
-In this folder, there is a source code for the Android Application.
+In this folder, there is a source code for the Android Application. As an examample, this App is launched on PlayStore. 
