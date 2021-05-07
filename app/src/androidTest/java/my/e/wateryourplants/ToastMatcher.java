@@ -1,4 +1,4 @@
-package my.e.wateryourplants.Auth;
+package my.e.wateryourplants;
 
 import android.os.IBinder;
 import android.view.WindowManager;

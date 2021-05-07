@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import my.e.wateryourplants.R;
+import my.e.wateryourplants.ToastMatcher;
 
 import static androidx.test.espresso.Espresso.onView;
 
@@ -67,6 +68,7 @@ public class LoginActivityTest {
     public ActivityScenarioRule<LoginActivity> rule
             = new ActivityScenarioRule<>(LoginActivity.class);
 
+    // checking all EditTexts Hints
     @Test
     public void testAllHints() {
         onView(withId(R.id.login_et_email)).check(matches(withHint(R.string.et_hint_email)))
@@ -75,18 +77,21 @@ public class LoginActivityTest {
                 .check(matches(isEnabled()));
     }
 
+    // check a login Button match with button name
     @Test
     public void testButtonText() {
         onView(withId(R.id.login_btn_login)).check(matches(withText(R.string.btn_login)))
                 .check(matches(isEnabled()));
     }
 
+    // check a check box is enabled and match with name text
     @Test
     public void checkBoxIsEnabled() {
         onView(withId(R.id.login_cb_remember_me)).check(matches(withText(R.string.cb_remember_me)))
                 .check(matches(isEnabled()));
     }
 
+    // checking all empty edit texts
     @Test
     public void testAllViewsEmpty() {
         onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
@@ -100,6 +105,7 @@ public class LoginActivityTest {
                 .check(matches(withText("Please fill all required fields")));
     }
 
+    // check login with a wrong email type
     @Test
     public void testInvalidEmail() {
         email = "111111";
@@ -118,6 +124,7 @@ public class LoginActivityTest {
                 .check(matches(hasFocus()));
     }
 
+    // testing a CheckBox is clickable and checked
     @Test
     public void testRememberMeIsChecked() {
         onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
@@ -126,6 +133,8 @@ public class LoginActivityTest {
         onView(withId(R.id.login_cb_remember_me)).check(matches(isChecked()));
     }
 
+    // checking successful login,
+    // without RememberMe function
     @Test
     public void testLoginSuccessWithoutRememberMe() throws InterruptedException {
         onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
@@ -180,6 +189,7 @@ public class LoginActivityTest {
 
     }
 
+    // checking successful login, with RememberMe function
     @Test
     public void testLoginWithRememberMe() throws InterruptedException {
         onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
@@ -234,239 +244,8 @@ public class LoginActivityTest {
 
         // check CheckBox is unChecked
         onView(withId(R.id.login_cb_remember_me)).check(matches(isChecked()));
-
     }
 
-    @Test
-    public void testLoginAndNameUpdate() throws InterruptedException {
-        String name = "Sam";
-        String updatedName = "Sammin";
-        email = "test@test.ru";
-        password = "1234567";
-
-        onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
-
-        //type name, email, password to a specific EditText and check it
-        onView(withId(R.id.login_et_email)).perform(clearText(),
-                typeText(email), closeSoftKeyboard());
-        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
-        onView(withId(R.id.login_et_password)).perform(clearText(),
-                typeText(password), closeSoftKeyboard());
-        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
-
-        // find a CheckBox and set it Checked
-        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
-        onView(withId(R.id.login_cb_remember_me)).perform(click());
-
-        //click to Login Button
-        onView(withId(R.id.login_btn_login)).perform(click());
-
-        // check Toast - Login Success
-        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
-                .check(matches(withText("Login is successful")));
-
-        Thread.sleep(2000);
-
-        // find a menu
-        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
-
-        // click Log Out Button on menu
-        onView(withText(R.string.menu_main_account_details)).perform(click());
-
-        // check a name in EditText
-        onView(withId(R.id.user_account_et_name)).check(matches(withText(name)));
-
-        //type a name for update
-        onView(withId(R.id.user_account_et_name)).perform(clearText(),
-                typeText(updatedName), closeSoftKeyboard());
-
-        //click Update Button
-        onView(withId(R.id.user_account_btn_update)).perform(click());
-
-        // check Toast - Update Success
-        onView(withText(R.string.toast_update_success)).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.toast_update_success)).inRoot(new ToastMatcher())
-                .check(matches(withText("User details updated")));
-
-        Thread.sleep(2000);
-
-        // find a menu
-        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
-
-        // click Log Out Button on menu
-        onView(withText(R.string.menu_main_account_details)).perform(click());
-
-        // check an updated name in EditText
-        onView(withId(R.id.user_account_et_name)).check(matches(withText(updatedName)));
-
-        Thread.sleep(2000);
-
-        //type a previous name for update
-        onView(withId(R.id.user_account_et_name)).perform(clearText(),
-                typeText(name), closeSoftKeyboard());
-
-        //click Update Button
-        onView(withId(R.id.user_account_btn_update)).perform(click());
-
-        // check Toast - Update Success
-        onView(withText(R.string.toast_update_success)).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.toast_update_success)).inRoot(new ToastMatcher())
-                .check(matches(withText("User details updated")));
-    }
-
-    @Test
-    public void testLoginAndWrongEmailUpdate() throws InterruptedException {
-        email = "test@test.ru";
-        String updatedEmail = "testtest.rou";
-        password = "1234567";
-
-        onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
-
-        //type email, password to a specific EditText and check it
-        onView(withId(R.id.login_et_email)).perform(clearText(),
-                typeText(email), closeSoftKeyboard());
-        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
-        onView(withId(R.id.login_et_password)).perform(clearText(),
-                typeText(password), closeSoftKeyboard());
-        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
-
-        // find a CheckBox and set it Checked
-        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
-        onView(withId(R.id.login_cb_remember_me)).perform(click());
-
-        //click to Login Button
-        onView(withId(R.id.login_btn_login)).perform(click());
-
-        // check Toast - Login Success
-        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
-                .check(matches(withText("Login is successful")));
-
-        Thread.sleep(2000);
-
-        // find a menu
-        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
-
-        // click Log Out Button on menu
-        onView(withText(R.string.menu_main_account_details)).perform(click());
-
-        Thread.sleep(2000);
-
-        // check an email in EditText
-        onView(withId(R.id.user_account_et_email)).check(matches(withText(email)));
-
-        //type an email for update
-        onView(withId(R.id.user_account_et_email)).perform(clearText(),
-                typeText(updatedEmail), closeSoftKeyboard());
-
-        //click Update Button
-        onView(withId(R.id.user_account_btn_update)).perform(click());
-
-        // check Toast - Update Failed
-        onView(withId(R.id.user_account_et_email))
-                .check(matches(hasErrorText("Please provide a valid email")))
-                .check(matches(hasFocus()));
-    }
-
-    @Test
-    public void testLoginAndEmailUpdate() throws InterruptedException {
-        email = "test@test.ru";
-        String updatedEmail = "test@test.rou";
-        password = "1234567";
-
-        onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
-
-        //type email, password to a specific EditText and check it
-        onView(withId(R.id.login_et_email)).perform(clearText(),
-                typeText(email), closeSoftKeyboard());
-        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
-        onView(withId(R.id.login_et_password)).perform(clearText(),
-                typeText(password), closeSoftKeyboard());
-        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
-
-        // find a CheckBox and set it Checked
-        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
-        onView(withId(R.id.login_cb_remember_me)).perform(click());
-
-        //click to Login Button
-        onView(withId(R.id.login_btn_login)).perform(click());
-
-        // check Toast - Login Success
-        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
-                .check(matches(withText("Login is successful")));
-
-        Thread.sleep(2000);
-
-        // find a menu
-        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
-
-        // click Log Out Button on menu
-        onView(withText(R.string.menu_main_account_details)).perform(click());
-
-        // check an email in EditText
-        onView(withId(R.id.user_account_et_email)).check(matches(withText(email)));
-
-        //type a new email for update
-        onView(withId(R.id.user_account_et_email)).perform(clearText(),
-                typeText(updatedEmail), closeSoftKeyboard());
-
-        //click Update Button
-        onView(withId(R.id.user_account_btn_update)).perform(click());
-
-        // check Toast - Update Success
-        onView(withText(R.string.toast_update_success)).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.toast_update_success)).inRoot(new ToastMatcher())
-                .check(matches(withText("User details updated")));
-
-        Thread.sleep(2000);
-
-        // find a menu
-        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
-
-        // click Log Out Button on menu
-        onView(withText(R.string.menu_main_account_details)).perform(click());
-
-        // check an updated name in EditText
-        onView(withId(R.id.user_account_et_email)).check(matches(withText(updatedEmail)));
-
-        Thread.sleep(2000);
-
-        //then type a previous email
-        onView(withId(R.id.user_account_et_email)).perform(clearText(),
-                typeText(email), closeSoftKeyboard());
-
-        //click Update Button
-        onView(withId(R.id.user_account_btn_update)).perform(click());
-
-        // check Toast - Update Success
-        onView(withText(R.string.toast_update_success)).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.toast_update_success)).inRoot(new ToastMatcher())
-                .check(matches(withText("User details updated")));
-
-        Thread.sleep(2000);
-
-        // find a menu
-        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
-
-        // click Log Out Button on menu
-        onView(withText(R.string.menu_main_account_details)).perform(click());
-
-        // check an updated name in EditText
-        onView(withId(R.id.user_account_et_email)).check(matches(withText(email)));
-
-    }
 
     public void setPreferences() {
         editor = preferences.edit();
@@ -475,6 +254,7 @@ public class LoginActivityTest {
         editor.apply();
     }
 
+    // checking Shared Preferences
     @Test
     public void testSharedPreferences() {
         setPreferences();
@@ -487,6 +267,7 @@ public class LoginActivityTest {
 
     }
 
+    // checking Shared Preferences with email = null
     @Test
     public void testSharedPreferencesRemoveEmail() {
         setPreferences();
@@ -501,6 +282,7 @@ public class LoginActivityTest {
 
     }
 
+    // checking Shared Preferences with password= null
     @Test
     public void testSharedPreferencesRemovePassword() {
         setPreferences();
@@ -515,12 +297,12 @@ public class LoginActivityTest {
 
     }
 
-
     @After
     public void tearDown() {
         preferences.edit().putString(PREF, null).apply();
     }
 
+    // custom ViewAction for a CheckBox which always set false
     public static ViewAction setChecked() {
         return new ViewAction() {
             @Override

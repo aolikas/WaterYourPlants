@@ -12,7 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import my.e.wateryourplants.Auth.ToastMatcher;
+import my.e.wateryourplants.Auth.LoginActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -23,30 +23,35 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.*;
+import static my.e.wateryourplants.Auth.LoginActivityTest.setChecked;
+import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
-    private String name, description;
+    private String email, password, name, description;
 
     @Rule
-    public ActivityScenarioRule<MainActivity> rule =
-            new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule<LoginActivity> rule =
+            new ActivityScenarioRule<>(LoginActivity.class);
 
 
     @Before
     public void setUp() {
+        email = "test@test.ru";
+        password = "1234567";
         name = "This is a sensor name";
         description = "This is a sensor description";
 
     }
 
+    // checking a main menu items
     @Test
-    public void testMenuItems() throws InterruptedException {
+    public void testMenuItems() {
 
         openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
 
@@ -54,62 +59,148 @@ public class MainActivityTest {
         onView(withText(R.string.menu_main_account_details)).check(matches(withText("Account details")));
         onView(withText(R.string.menu_main_account_details))
                 .perform(click());
-
     }
 
+    // login, clicking on Fab, checking all textView amd editTexts, Buttons
     @Test
-    public void testFabClickAndDialogViews() {
+    public void testFabClickAndDialogViews() throws InterruptedException {
+
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(2000);
+
+        //find a FAB
         onView(withId(R.id.main_fab)).check(matches(isDisplayed()));
+        //click on it
         onView(withId(R.id.main_fab)).perform(click());
 
+        // check Dialog title text
         onView(withId(R.id.dialog_create_title)).check(matches(withText("Add a new sensor")));
 
+        //check EditText hints
         onView(withId(R.id.dialog_create_et_sensor_name))
                 .check(matches(withHint(R.string.dialog_create_et_hint_sensor_name)))
                 .check(matches(isEnabled()));
         onView(withId(R.id.dialog_create_et_sensor_description))
                 .check(matches(withHint(R.string.dialog_create_et_hint_sensor_description)))
                 .check(matches(isEnabled()));
+
+        //find a Create Button in dialog
+        onView(withText(R.string.dialog_create))
+                .check(matches(withText("Create")));
+
+        //find a Create Button in dialog
+        onView(withText(R.string.dialog_cancel))
+                .check(matches(withText("Cancel")));
+
+        //click a Cancel Button
+        onView(withText(R.string.dialog_cancel)).perform(click());
     }
 
+    //
     @Test
-    public void testFabClickAndEmptyName() {
-        onView(withId(R.id.main_fab)).check(matches(isDisplayed()));
-        onView(withId(R.id.main_fab)).perform(click());
+    public void testFabClickAndEmptyName() throws InterruptedException {
 
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(2000);
+
+        //find a FAB
+        onView(withId(R.id.main_fab)).check(matches(isDisplayed()));
+        //click on it
+        onView(withId(R.id.main_fab)).perform(click());
+        // clear EditText Name
         onView(withId(R.id.dialog_create_et_sensor_name)).perform(clearText(), closeSoftKeyboard());
+        // fill EditText Description
         onView(withId(R.id.dialog_create_et_sensor_description)).perform(clearText(),
                 typeText(description), closeSoftKeyboard());
-
+        // Create Button click
         onView(withText(R.string.dialog_create)).perform(click());
 
+        // Toast show with error
         onView(withText(R.string.toast_dialog_empty_sensor_name)).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
         onView(withText(R.string.toast_dialog_empty_sensor_name)).inRoot(new ToastMatcher())
                 .check(matches(withText("Please try again and give your sensor a name")));
     }
 
-    @Test
-    public void testFabClickAndCancelClick() {
-
-        onView(withId(R.id.main_fab)).check(matches(isDisplayed()));
-        onView(withId(R.id.main_fab)).perform(click());
-
-        onView(withId(R.id.dialog_create_et_sensor_name)).perform(clearText(),
-                typeText(name), closeSoftKeyboard());
-        onView(withId(R.id.dialog_create_et_sensor_description)).perform(clearText(),
-                typeText(description), closeSoftKeyboard());
-
-        onView(withText(R.string.dialog_cancel)).perform(click());
-
-    }
 
     @Test
-    public void testFabClickAndCreateSensor() {
+    public void testFabClickAndCreateSensor() throws InterruptedException {
 
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(2000);
+
+        //find a FAB
         onView(withId(R.id.main_fab)).check(matches(isDisplayed()));
+        //click on it
         onView(withId(R.id.main_fab)).perform(click());
 
+        // type sensor name and description
         onView(withId(R.id.dialog_create_et_sensor_name)).perform(clearText(),
                 typeText(name), closeSoftKeyboard());
         onView(withId(R.id.dialog_create_et_sensor_description)).perform(clearText(),
@@ -117,11 +208,6 @@ public class MainActivityTest {
 
         onView(withText(R.string.dialog_create)).perform(click());
 
-        onView(withId(R.id.item_data_sensor_name))
-                .check(matches(withText("This is a sensor name"))).check(matches(isDisplayed()));
-        onView(withId(R.id.item_data_sensor_description))
-                .check(matches(withText("This is a sensor description")))
-                .check(matches(isDisplayed()));
     }
 
 

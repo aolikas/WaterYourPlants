@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import my.e.wateryourplants.R;
+import my.e.wateryourplants.ToastMatcher;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -49,6 +50,7 @@ public class RegistrationActivityTest {
         password = "Te$TwAte4";
     }
 
+    // checking all EditTexts Hints
     @Test
     public void testAllHints() {
         onView(withId(R.id.reg_et_name)).check(matches(withHint(R.string.et_hint_name)))
@@ -59,12 +61,14 @@ public class RegistrationActivityTest {
                 .check(matches(isEnabled()));
     }
 
+    // check a registration Button match with button name
     @Test
     public void testButtonText() {
         onView(withId(R.id.reg_btn_registration)).check(matches(withText(R.string.btn_register)))
                 .check(matches(isEnabled()));
     }
 
+    // checking all empty edit texts
     @Test
     public void testAllViewsEmpty() {
         onView(withId(R.id.reg_progress_bar)).check(matches(not(isDisplayed())));
@@ -81,6 +85,7 @@ public class RegistrationActivityTest {
                 .check(matches(withText("Please fill all required fields")));
     }
 
+    // check registration with a wrong email type
     @Test
     public void testInvalidEmail() {
         email = "111111";
@@ -103,7 +108,7 @@ public class RegistrationActivityTest {
                 .check(matches(hasFocus()));
     }
 
-
+    // check registration with a invalid password, should be more than 6 char
     @Test
     public void testInvalidPassword() {
         password = "11";
@@ -126,6 +131,8 @@ public class RegistrationActivityTest {
                 .check(matches(hasFocus()));
     }
 
+    // checking successful registration,
+    // lately this email will be used for testing ForgetEmail function
     @Test
     public void testRegSuccess() {
         onView(withId(R.id.reg_progress_bar)).check(matches(not(isDisplayed())));
@@ -148,6 +155,7 @@ public class RegistrationActivityTest {
                 .check(matches(withText("Registration is successful")));
     }
 
+    //checking new data register and then log out function
     @Test
     public void testRegisterAndLogOut() throws InterruptedException {
         name = "Sam";
@@ -188,6 +196,7 @@ public class RegistrationActivityTest {
                 .check(matches(withText("Logged Out")));
     }
 
+    //checking new data register and then delete user function
     @Test
     public void testRegisterAndDeleteAccount() throws InterruptedException {
         name = "Sally";

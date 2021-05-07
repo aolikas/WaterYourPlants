@@ -64,10 +64,9 @@
     <string name="toast_menu_log_out">Logged Out</string>
     <string name="toast_update_success">User details updated</string>
     <string name="toast_update_failed">Something is wrong</string>
+    <string name="toast_copy_id_success">User Id successfully copied</string>
 
     <string name="error_invalid_email">Please provide a valid email</string>
     <string name="error_invalid_password">Password should be at least 6 characters</string>
-
-
 
 </resources>

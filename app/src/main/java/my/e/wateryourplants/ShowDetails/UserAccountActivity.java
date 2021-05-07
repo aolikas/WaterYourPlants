@@ -155,8 +155,6 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         String email = Objects.requireNonNull(etUserEmail.getText()).toString().trim();
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this,
-                    getString(R.string.error_invalid_email), Toast.LENGTH_SHORT).show();
             etUserEmail.setError(getString(R.string.error_invalid_email));
             etUserEmail.requestFocus();
         } else {
@@ -194,7 +192,8 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         String userId = txtUserId.getText().toString();
         ClipData mClipData = ClipData.newPlainText("id", userId);
         mClipboardManager.setPrimaryClip(mClipData);
-        Toast.makeText(this, "User Id copied to Clipboard.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.toast_copy_id_success),
+                Toast.LENGTH_SHORT).show();
     }
 
     public void hideKeyboard() {

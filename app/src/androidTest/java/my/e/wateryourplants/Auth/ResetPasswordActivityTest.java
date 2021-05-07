@@ -7,6 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import my.e.wateryourplants.R;
+import my.e.wateryourplants.ToastMatcher;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
@@ -38,18 +39,21 @@ public class ResetPasswordActivityTest {
         email = "waterplantstest@gmail.com";
     }
 
+    // checking  EditText Hint
     @Test
     public void testAllHints() {
         onView(withId(R.id.reset_et_email)).check(matches(withHint(R.string.et_hint_email)))
                 .check(matches(isEnabled()));
     }
 
+    // check a Reset Password Button match with button name
     @Test
     public void testButtonText() {
         onView(withId(R.id.reset_btn_reset)).check(matches(withText(R.string.btn_reset_password)))
                 .check(matches(isEnabled()));
     }
 
+    // checking with empty edit text
     @Test
     public void testEmailEmpty() {
         onView(withId(R.id.reset_progress_bar)).check(matches(not(isDisplayed())));
@@ -64,6 +68,7 @@ public class ResetPasswordActivityTest {
                 .check(matches(withText("Please fill all required fields")));
     }
 
+    // check registration with a wrong email type
     @Test
     public void testInvalidEmail() {
         email = "111111";
@@ -81,7 +86,7 @@ public class ResetPasswordActivityTest {
     }
 
     @Test
-    public void testRegSuccess() {
+    public void testResetSuccess() {
         onView(withId(R.id.reset_progress_bar)).check(matches(not(isDisplayed())));
 
         onView(withId(R.id.reset_et_email)).perform(clearText(),

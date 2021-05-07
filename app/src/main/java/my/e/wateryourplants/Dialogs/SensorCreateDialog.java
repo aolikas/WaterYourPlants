@@ -55,7 +55,7 @@ public class SensorCreateDialog extends AppCompatDialogFragment {
                         if(TextUtils.isEmpty(name)) {
                             Toast.makeText(view.getContext(),
                                     getString(R.string.toast_dialog_empty_sensor_name),
-                                    Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                         } else {
                             mAuth = FirebaseAuth.getInstance();
                             FirebaseUser user = mAuth.getCurrentUser();
