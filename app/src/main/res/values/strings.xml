@@ -65,8 +65,16 @@
     <string name="toast_update_success">User details updated</string>
     <string name="toast_update_failed">Something is wrong</string>
     <string name="toast_copy_id_success">User Id successfully copied</string>
+    <string name="toast_sensor_data_copy_id_success">Sensor Id successfully copied</string>
+    <string name="toast_sensor_data_set_slider_success_1">"Watering duration successfully sets for "</string>
+    <string name="toast_sensor_data_set_slider_success_2">" sec"</string>
+    <string name="toast_sensor_data_set_slider_failed">Something is wrong. Setting impossible</string>
+    <string name="toast_sensor_data_auto_watering_on">Automatic Watering successfully turn on</string>
+    <string name="toast_sensor_data_auto_watering_off">Automatic Watering turn off</string>
+    <string name="toast_sensor_data_auto_watering_error">Something is wrong. Setting impossible</string>
 
     <string name="error_invalid_email">Please provide a valid email</string>
     <string name="error_invalid_password">Password should be at least 6 characters</string>
+
 
 </resources>

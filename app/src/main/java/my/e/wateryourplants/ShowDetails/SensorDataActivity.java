@@ -189,14 +189,14 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onStartTrackingTouch(@NonNull Slider slider) {
                 mSliderDuration = slider.getValue();
-                Toast.makeText(SensorDataActivity.this, "Value Start" + mSliderDuration , Toast.LENGTH_SHORT).show();
+               // Toast.makeText(SensorDataActivity.this, "Value Start" + mSliderDuration , Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onStopTrackingTouch(@NonNull Slider slider) {
                 mSliderDuration = slider.getValue();
                 sendSliderDuration();
-                Toast.makeText(SensorDataActivity.this, "Value Stop" + mSliderDuration , Toast.LENGTH_SHORT).show();
+               // Toast.makeText(SensorDataActivity.this, "Value Stop" + mSliderDuration , Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -219,9 +219,13 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()) {
-                                        Toast.makeText(SensorDataActivity.this, "Automatic Watering successfully sets", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SensorDataActivity.this,
+                                                getString(R.string.toast_sensor_data_auto_watering_on),
+                                                Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(SensorDataActivity.this, "Something is wrong. Setting impossible", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SensorDataActivity.this,
+                                                getString(R.string.toast_sensor_data_auto_watering_error),
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -240,9 +244,13 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()) {
-                                        Toast.makeText(SensorDataActivity.this, "Automatic Watering successfully sets", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SensorDataActivity.this,
+                                                getString(R.string.toast_sensor_data_auto_watering_off),
+                                                Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(SensorDataActivity.this, "Something is wrong. Setting impossible", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SensorDataActivity.this,
+                                                getString(R.string.toast_sensor_data_auto_watering_error),
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -320,9 +328,15 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()) {
-                            Toast.makeText(SensorDataActivity.this, "Watering duration successfully sets", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SensorDataActivity.this,
+                                    (getString(R.string.toast_sensor_data_set_slider_success_1)
+                                    + Math.round(mSliderDuration)
+                                    + getString(R.string.toast_sensor_data_set_slider_success_2)),
+                                    Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(SensorDataActivity.this, "Something is wrong. Setting impossible", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SensorDataActivity.this,
+                                    getString(R.string.toast_sensor_data_set_slider_failed),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -335,7 +349,7 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
         mClipboardManager.setPrimaryClip(mClipData);
 
         Toast.makeText(this,
-                "Sensor Id copied to Clipboard.",
+                getString(R.string.toast_sensor_data_copy_id_success),
                 Toast.LENGTH_SHORT).show();
     }
 

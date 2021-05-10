@@ -28,6 +28,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/sensor_data_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -37,6 +38,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                 <TextView
+                    android:id="@+id/sensor_data_txt_id_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
@@ -80,6 +82,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/sensor_data_watering_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -89,6 +92,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                 <TextView
+                    android:id="@+id/sensor_data_watering_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -114,6 +118,7 @@
                     android:orientation="horizontal"
                     android:layout_marginBottom="10dp">
                     <TextView
+                        android:id="@+id/sensor_data_watering_automatic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -139,6 +144,7 @@
                     android:orientation="horizontal"
                     android:layout_marginBottom="10dp">
                     <TextView
+                        android:id="@+id/sensor_data_watering_notify"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -176,6 +182,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/sensor_data_editing_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
