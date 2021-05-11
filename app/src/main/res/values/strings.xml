@@ -72,9 +72,14 @@
     <string name="toast_sensor_data_auto_watering_on">Automatic Watering successfully turn on</string>
     <string name="toast_sensor_data_auto_watering_off">Automatic Watering turn off</string>
     <string name="toast_sensor_data_auto_watering_error">Something is wrong. Setting impossible</string>
+    <string name="toast_sensor_data_update_success">Sensor Data updated</string>
+    <string name="toast_sensor_data_update_failed">Something is wrong. Updating impossible</string>
+    <string name="toast_sensor_data_dialog_delete">Sensor deleted</string>
+
 
     <string name="error_invalid_email">Please provide a valid email</string>
     <string name="error_invalid_password">Password should be at least 6 characters</string>
+    <string name="error_empty_sensor_name">Please give your sensor a name</string>
 
 
 </resources>

@@ -32,9 +32,13 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
+import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
@@ -265,7 +269,75 @@ public class SensorDataActivityTest {
         pressBack();
     }
 
-    // testing Slider in Watering Card, set a value
+    // testing Toggle Button in Watering Card, turn on/off
+    @Test
+    public void testToggledButtonOnOff() throws InterruptedException {
+
+        onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(3000);
+
+        // find a recycler view, click an item position 0
+        onView(withId(R.id.main_recycler_view)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // switch button off
+        onView(withId(R.id.sensor_data_switch_auto_water)).perform(setChecked());
+
+        // check for a state
+        onView(withId(R.id.sensor_data_switch_auto_water)).check(matches(isNotChecked()));
+
+        // click to turn on
+        onView(withId(R.id.sensor_data_switch_auto_water)).perform(click());
+
+        // check Toast - turn on auto watering
+        onView(withText(R.string.toast_sensor_data_auto_watering_on)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_sensor_data_auto_watering_on)).inRoot(new ToastMatcher())
+                .check(matches(withText("Automatic Watering successfully turn on")));
+
+        Thread.sleep(2000);
+
+        // checking a state for a true
+        onView(withId(R.id.sensor_data_switch_auto_water)).check(matches(isChecked()));
+
+        // click on button
+        onView(withId(R.id.sensor_data_switch_auto_water))
+                .perform(click()).check(matches(isEnabled()));
+
+        // check Toast - turn off auto watering
+        onView(withText(R.string.toast_sensor_data_auto_watering_off)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_sensor_data_auto_watering_off)).inRoot(new ToastMatcher())
+                .check(matches(withText("Automatic Watering turn off")));
+
+        pressBack();
+    }
+
+
+    // testing Toggle Button in Watering Card, turn on/off
     @Test
     public void testToggledButton() throws InterruptedException {
 
@@ -299,13 +371,14 @@ public class SensorDataActivityTest {
         onView(withId(R.id.main_recycler_view)).
                 perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-
+        // switch button off
         onView(withId(R.id.sensor_data_switch_auto_water)).perform(setChecked());
 
+        // check for a state
         onView(withId(R.id.sensor_data_switch_auto_water)).check(matches(isNotChecked()));
 
+        // click to turn on
         onView(withId(R.id.sensor_data_switch_auto_water)).perform(click());
-
 
         // check Toast - turn on auto watering
         onView(withText(R.string.toast_sensor_data_auto_watering_on)).inRoot(new ToastMatcher())
@@ -315,7 +388,7 @@ public class SensorDataActivityTest {
 
         Thread.sleep(2000);
 
-        // checking true state
+        // checking a state for a true
         onView(withId(R.id.sensor_data_switch_auto_water)).check(matches(isChecked()));
 
         // click on button
@@ -331,6 +404,255 @@ public class SensorDataActivityTest {
         pressBack();
     }
 
+    // testing Update Button in Editing Card with empty sensor name
+    @Test
+    public void testUpdateEmptySensorName() throws InterruptedException {
+
+        onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(3000);
+
+        // find a recycler view, click an item position 0
+        onView(withId(R.id.main_recycler_view)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // clear Edit text for sensor name
+        onView(withId(R.id.sensor_data_et_name)).perform(clearText(), closeSoftKeyboard());
+
+        Thread.sleep(1000);
+
+        onView(withId(R.id.sensor_data_btn_update))
+                .check(matches(withText(R.string.sensor_data_btn_update)))
+                .check(matches(isEnabled()));
+
+        // click Update Button
+        onView(withId(R.id.sensor_data_btn_update)).perform(scrollTo(), click());
+
+        // catch error state
+        onView(withId(R.id.sensor_data_et_name))
+                .check(matches(hasErrorText("Please give your sensor a name")))
+                .check(matches(hasFocus()));
+
+        pressBack();
+    }
+
+
+    // testing Update Button in Editing Card
+    @Test
+    public void testUpdateSensorData() throws InterruptedException {
+        // a new data to update
+        String newName = "This is a new name";
+        String newDescription = "This is a new description";
+
+        onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(3000);
+
+        // find a recycler view, click an item position 0
+        onView(withId(R.id.main_recycler_view)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // type a new sensor name
+        onView(withId(R.id.sensor_data_et_name)).perform(clearText(),
+                typeText(newName),closeSoftKeyboard());
+        // type a new sensor description
+        onView(withId(R.id.sensor_data_et_description)).perform(clearText(),
+                typeText(newDescription),closeSoftKeyboard());
+
+        // click Update Button
+        onView(withId(R.id.sensor_data_btn_update)).perform(scrollTo(),click());
+
+        // check Toast - Update Success
+        onView(withText(R.string.toast_sensor_data_update_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_sensor_data_update_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Sensor Data updated")));
+
+        Thread.sleep(2000);
+
+        // find a recycler view, click an item position 0 one more time
+        onView(withId(R.id.main_recycler_view)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // check new sensor name
+        onView(withId(R.id.sensor_data_et_name)).check(matches(withText(newName)));
+
+        // check new sensor description
+        onView(withId(R.id.sensor_data_et_description)).check(matches(withText(newDescription)));
+
+        // type a previous sensor name
+        onView(withId(R.id.sensor_data_et_name)).perform(clearText(),
+                typeText(sensorName),closeSoftKeyboard());
+
+        // type a previous sensor description
+        onView(withId(R.id.sensor_data_et_description)).perform(clearText(),
+                typeText(sensorDescription),closeSoftKeyboard());
+
+        // click Update Button
+        onView(withId(R.id.sensor_data_btn_update)).perform(scrollTo(),click());
+
+        // check Toast - Update Success
+        onView(withText(R.string.toast_sensor_data_update_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_sensor_data_update_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Sensor Data updated")));
+
+        pressBack();
+    }
+
+    // testing Delete Button in Editing Card, click cancel
+    @Test
+    public void testDeleteSensorCancel() throws InterruptedException {
+
+        onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(3000);
+
+        // find a recycler view, click an item position 0
+        onView(withId(R.id.main_recycler_view)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+
+        // click Delete Button
+        onView(withId(R.id.sensor_data_btn_delete)).perform(scrollTo(),click());
+
+        // checking Dialog Title for matching
+        onView(withText(R.string.sensor_data_dialog_delete_msg))
+                .check(matches(withText("Are you sure you want to delete this sensor?")));
+
+        // find Cancel Button in dialog, checking for matching
+        onView(withText(R.string.sensor_data_dialog_delete_positive_button))
+                .check(matches(withText("Delete")));
+
+        // click on Cancel Button
+        onView(withText(R.string.sensor_data_dialog_delete_positive_button)).perform(click());
+
+        // check Toast - Delete Success
+        onView(withText(R.string.toast_sensor_data_dialog_delete)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_sensor_data_dialog_delete)).inRoot(new ToastMatcher())
+                .check(matches(withText("Sensor deleted")));
+
+        pressBack();
+    }
+
+
+
+    // testing Delete Sensor  in Editing Card
+    @Test
+    public void testDeleteSensor() throws InterruptedException {
+
+        onView(withId(R.id.login_progress_bar)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(3000);
+
+        // find a recycler view, click an item position 0
+        onView(withId(R.id.main_recycler_view)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // click Delete Button
+        onView(withId(R.id.sensor_data_btn_delete)).perform(scrollTo(),click());
+
+        // checking Dialog Title for matching
+        onView(withText(R.string.sensor_data_dialog_delete_msg))
+                .check(matches(withText("Are you sure you want to delete this sensor?")));
+
+        // find Cancel Button in dialog, checking for matching
+        onView(withText(R.string.dialog_cancel))
+                .check(matches(withText("Cancel")));
+
+        // click on Cancel Button
+        onView(withText(R.string.dialog_cancel)).perform(click());
+
+        pressBack();
+    }
 
     //custom matcher for setting Value Slider
     public static ViewAction setProgress(final int progress) {
@@ -367,48 +689,4 @@ public class SensorDataActivityTest {
             }
         };
    }
-
-    // custom ViewAction for a Toggled Button which set value
-    public static ViewAction setButtonChecked(final boolean checked) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return new Matcher<View>() {
-                    @Override
-                    public boolean matches(Object item) {
-                        return isA(Checkable.class).matches(item);
-                    }
-
-                    @Override
-                    public void describeMismatch(Object item, Description mismatchDescription) {
-
-                    }
-
-                    @Override
-                    public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
-
-                    }
-
-                    @Override
-                    public void describeTo(Description description) {
-
-                    }
-                };
-            }
-
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                Checkable checkableView = (Checkable) view;
-                if(checkableView.isChecked() != checked)
-            //    checkableView.setChecked(checked);
-                click().perform(uiController, view);
-
-            }
-        };
-    }
 }
