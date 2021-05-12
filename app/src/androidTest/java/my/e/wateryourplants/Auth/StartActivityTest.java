@@ -3,9 +3,6 @@ package my.e.wateryourplants.Auth;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,15 +56,6 @@ public class StartActivityTest {
         pressBack();
         onView(withId(R.id.start_btn_forgot_password)).perform(click());
         pressBack();
-    }
-
-    @Before
-    public void setUp() {
-
-    }
-
-    @After
-    public void tearDown() {
     }
 
 }

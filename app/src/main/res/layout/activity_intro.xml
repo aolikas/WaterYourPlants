@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IntroSlide.IntroActivity">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/intro_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/intro_btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/gray"
+        android:text="@string/intro_btn_next" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/intro_btn_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/gray"
+        android:text="@string/intro_btn_skip" />
+</FrameLayout>

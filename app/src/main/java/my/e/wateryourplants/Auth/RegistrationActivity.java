@@ -46,73 +46,64 @@ public class RegistrationActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        btnRegistration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String txtName = etName.getText().toString().trim();
-                String txtEmail = etEmail.getText().toString().trim();
-                String txtPassword = etPassword.getText().toString().trim();
-                progressBar.setVisibility(View.VISIBLE);
+        btnRegistration.setOnClickListener(view -> {
+            String txtName = etName.getText().toString().trim();
+            String txtEmail = etEmail.getText().toString().trim();
+            String txtPassword = etPassword.getText().toString().trim();
+            progressBar.setVisibility(View.VISIBLE);
 
-                if (TextUtils.isEmpty(txtName) || TextUtils.isEmpty(txtEmail)
-                        || TextUtils.isEmpty(txtPassword)) {
-                    Toast.makeText(RegistrationActivity.this,
-                            getString(R.string.toast_error_empty_fields), Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    hideKeyboard();
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches()) {
-                    etEmail.setError(getString(R.string.error_invalid_email));
-                    etEmail.requestFocus();
-                    progressBar.setVisibility(View.GONE);
-                    hideKeyboard();
-                } else if (txtPassword.length() < 6) {
-                    etPassword.setError(getString(R.string.error_invalid_password));
-                    etPassword.requestFocus();
-                    progressBar.setVisibility(View.GONE);
-                    hideKeyboard();
-                } else {
-                    register(txtName, txtEmail, txtPassword);
-                    hideKeyboard();
-                }
+            if (TextUtils.isEmpty(txtName) || TextUtils.isEmpty(txtEmail)
+                    || TextUtils.isEmpty(txtPassword)) {
+                Toast.makeText(RegistrationActivity.this,
+                        getString(R.string.toast_error_empty_fields), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                hideKeyboard();
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches()) {
+                etEmail.setError(getString(R.string.error_invalid_email));
+                etEmail.requestFocus();
+                progressBar.setVisibility(View.GONE);
+                hideKeyboard();
+            } else if (txtPassword.length() < 6) {
+                etPassword.setError(getString(R.string.error_invalid_password));
+                etPassword.requestFocus();
+                progressBar.setVisibility(View.GONE);
+                hideKeyboard();
+            } else {
+                register(txtName, txtEmail, txtPassword);
+                hideKeyboard();
             }
         });
     }
 
     private void register(String name, String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            assert user != null;
-                            String userId = user.getUid();
-                            mRef = FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(userId);
-                            UserData currentUser = new UserData(name, email);
-                            mRef.setValue(currentUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    progressBar.setVisibility(View.GONE);
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(RegistrationActivity.this,
-                                                getString(R.string.toast_reg_success), Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(RegistrationActivity.this,
-                                                getString(R.string.toast_reg_failed), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                        } else {
-                            Toast.makeText(RegistrationActivity.this,
-                                    Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
-                        }
-
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        assert user != null;
+                        String userId = user.getUid();
+                        mRef = FirebaseDatabase.getInstance().getReference("Users")
+                                .child(userId);
+                        UserData currentUser = new UserData(name, email);
+                        mRef.setValue(currentUser).addOnCompleteListener(task1 -> {
+                            progressBar.setVisibility(View.GONE);
+                            if (task1.isSuccessful()) {
+                                Toast.makeText(RegistrationActivity.this,
+                                        getString(R.string.toast_reg_success), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(RegistrationActivity.this,
+                                        getString(R.string.toast_reg_failed), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(RegistrationActivity.this,
+                                Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                     }
+
                 });
     }
 

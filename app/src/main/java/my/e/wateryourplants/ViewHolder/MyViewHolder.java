@@ -6,17 +6,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import my.e.wateryourplants.R;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView sensorName;
-    public TextView sensorDescription;
-    public TextView sensorMoistureCondition;
-    public TextView sensorTemperature;
-    public View view;
+    public final TextView sensorName;
+    public final TextView sensorDescription;
+    public final TextView sensorMoistureCondition;
+    public final TextView sensorTemperature;
+    public final View view;
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);

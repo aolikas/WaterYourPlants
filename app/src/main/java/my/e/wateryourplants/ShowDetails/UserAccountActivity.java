@@ -41,7 +41,6 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
 
     private TextView txtUserId;
     private TextInputEditText etUserName, etUserEmail;
-    private Button btnUpdate, btnDelete, btnCopy;
 
     private DatabaseReference mRef;
     private FirebaseAuth mAuth;
@@ -94,9 +93,9 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         txtUserId = findViewById(R.id.user_account_id);
         etUserName = findViewById(R.id.user_account_et_name);
         etUserEmail = findViewById(R.id.user_account_et_email);
-        btnUpdate = findViewById(R.id.user_account_btn_update);
-        btnDelete = findViewById(R.id.user_account_btn_delete_user);
-        btnCopy = findViewById(R.id.user_account_btn_copy);
+        Button btnUpdate = findViewById(R.id.user_account_btn_update);
+        Button btnDelete = findViewById(R.id.user_account_btn_delete_user);
+        Button btnCopy = findViewById(R.id.user_account_btn_copy);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
         btnCopy.setOnClickListener(this);
@@ -122,29 +121,20 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
     private void deleteUserAccount() {
         AlertDialog.Builder builder = new AlertDialog.Builder(UserAccountActivity.this);
         builder.setMessage(R.string.user_account_dialog_delete_msg);
-        builder.setPositiveButton(R.string.user_account_dialog_delete_positive_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                FirebaseUser user = mAuth.getCurrentUser();
-                assert user != null;
-                user.delete();
-                mRef.removeValue();
-                Toast.makeText(UserAccountActivity.this,
-                        getString(R.string.toast_dialog_delete_success), Toast.LENGTH_SHORT).show();
-                Intent intent = (new Intent(UserAccountActivity.this, StartActivity.class));
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }
-
+        builder.setPositiveButton(R.string.user_account_dialog_delete_positive_button, (dialogInterface, i) -> {
+            FirebaseUser user = mAuth.getCurrentUser();
+            assert user != null;
+            user.delete();
+            mRef.removeValue();
+            Toast.makeText(UserAccountActivity.this,
+                    getString(R.string.toast_dialog_delete_success), Toast.LENGTH_SHORT).show();
+            Intent intent = (new Intent(UserAccountActivity.this, StartActivity.class));
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         })
-                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
+                .setNegativeButton(R.string.dialog_cancel, (dialogInterface, i) -> dialogInterface.dismiss());
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -158,31 +148,25 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
             etUserEmail.setError(getString(R.string.error_invalid_email));
             etUserEmail.requestFocus();
         } else {
-            mUser.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
+            mUser.updateEmail(email).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
 
-                        UserData userData = new UserData(name, email);
+                    UserData userData = new UserData(name, email);
 
-                        Map<String, Object> dataUpdate = userData.toMapUserNameEmail();
-                        mRef.updateChildren(dataUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    startActivity(new Intent(UserAccountActivity.this,
-                                            MainActivity.class));
-                                    Toast.makeText(UserAccountActivity.this,
-                                            getString(R.string.toast_update_success),
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(UserAccountActivity.this,
-                                            getString(R.string.toast_update_failed),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
+                    Map<String, Object> dataUpdate = userData.toMapUserNameEmail();
+                    mRef.updateChildren(dataUpdate).addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            startActivity(new Intent(UserAccountActivity.this,
+                                    MainActivity.class));
+                            Toast.makeText(UserAccountActivity.this,
+                                    getString(R.string.toast_update_success),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(UserAccountActivity.this,
+                                    getString(R.string.toast_update_failed),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             });
         }

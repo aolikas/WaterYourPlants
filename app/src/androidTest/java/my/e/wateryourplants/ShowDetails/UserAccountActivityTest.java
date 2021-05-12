@@ -4,7 +4,6 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -482,7 +481,4 @@ public class UserAccountActivityTest {
         onView(withText(R.string.dialog_cancel)).perform(click());
     }
 
-    @After
-    public void tearDown() {
-    }
 }

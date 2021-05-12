@@ -39,43 +39,37 @@ public class ResetPasswordActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                String txtEmail = etEmail.getText().toString().trim();
-                if(TextUtils.isEmpty(txtEmail)) {
-                    Toast.makeText(ResetPasswordActivity.this,
-                            getString(R.string.toast_error_empty_fields), Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    hideKeyboard();
-                } else if(!Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches()) {
-                    etEmail.setError(getString(R.string.error_invalid_email));
-                    progressBar.setVisibility(View.GONE);
-                    hideKeyboard();
-                } else {
-                    resetUserPassword(txtEmail);
-                    hideKeyboard();
-                }
+        btnReset.setOnClickListener(view -> {
+            progressBar.setVisibility(View.VISIBLE);
+            String txtEmail = etEmail.getText().toString().trim();
+            if(TextUtils.isEmpty(txtEmail)) {
+                Toast.makeText(ResetPasswordActivity.this,
+                        getString(R.string.toast_error_empty_fields), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                hideKeyboard();
+            } else if(!Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches()) {
+                etEmail.setError(getString(R.string.error_invalid_email));
+                progressBar.setVisibility(View.GONE);
+                hideKeyboard();
+            } else {
+                resetUserPassword(txtEmail);
+                hideKeyboard();
             }
         });
     }
 
     private void resetUserPassword(String email) {
         mAuth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
-                            Toast.makeText(ResetPasswordActivity.this,
-                                    getString(R.string.toast_reset_success),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ResetPasswordActivity.this,
-                                    Objects.requireNonNull(task.getException()).getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(task -> {
+                    progressBar.setVisibility(View.GONE);
+                    if (task.isSuccessful()) {
+                        Toast.makeText(ResetPasswordActivity.this,
+                                getString(R.string.toast_reset_success),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ResetPasswordActivity.this,
+                                Objects.requireNonNull(task.getException()).getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -2,21 +2,15 @@ package my.e.wateryourplants.ShowDetails;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -51,7 +45,7 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
     private TextView txtSensorId;
     private TextInputEditText etSensorName, etSensorDescription;
     private Slider slWateringDuration;
-    private SwitchMaterial swAutomaticWatering, swNotifyCondition;
+    private SwitchMaterial swAutomaticWatering;
 
     private DatabaseReference mRef;
 
@@ -60,7 +54,6 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
     private String mKey;
     private Float mSliderDuration;
     private Boolean mSwitchSaveWateringState;
-    private Boolean mSwitchSaveNotifyState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +86,7 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
         txtSensorId = findViewById(R.id.sensor_data_txt_id);
         slWateringDuration = findViewById(R.id.sensor_data_slider_duration);
         swAutomaticWatering = findViewById(R.id.sensor_data_switch_auto_water);
-        swNotifyCondition = findViewById(R.id.sensor_data_switch_notify_condition);
+        SwitchMaterial swNotifyCondition = findViewById(R.id.sensor_data_switch_notify_condition);
 
         Button btnCopy = findViewById(R.id.sensor_data_btn_copy);
         Button btnUpdate = findViewById(R.id.sensor_data_btn_update);
@@ -160,69 +153,61 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initAutoWateringSwitch() {
-        swAutomaticWatering.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked) {
-                    mSwitchSaveWateringState = true;
-                    SharedPreferences.Editor editor
-                            = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
-                    editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveWateringState);
-                    editor.apply();
+        swAutomaticWatering.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked) {
+                mSwitchSaveWateringState = true;
+                SharedPreferences.Editor editor
+                        = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
+                editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveWateringState);
+                editor.apply();
 
-                    UserData userData = new UserData(null,
-                            null,
-                            null, mSwitchSaveWateringState,
-                            null);
-                    Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
-                    mRef.child(mKey).updateChildren(dataUpdate)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()) {
-                                        Toast.makeText(SensorDataActivity.this,
-                                                getString(R.string.toast_sensor_data_auto_watering_on),
-                                                Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(SensorDataActivity.this,
-                                                getString(R.string.toast_sensor_data_auto_watering_error),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                UserData userData = new UserData(null,
+                        null,
+                        null, mSwitchSaveWateringState,
+                        null);
+                Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
+                mRef.child(mKey).updateChildren(dataUpdate)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(SensorDataActivity.this,
+                                        getString(R.string.toast_sensor_data_auto_watering_on),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SensorDataActivity.this,
+                                        getString(R.string.toast_sensor_data_auto_watering_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-                } else {
-                    mSwitchSaveWateringState = false;
-                    SharedPreferences.Editor editor
-                            = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
-                    editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveWateringState);
-                    editor.apply();
+            } else {
+                mSwitchSaveWateringState = false;
+                SharedPreferences.Editor editor
+                        = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
+                editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveWateringState);
+                editor.apply();
 
-                    UserData userData = new UserData(null,
-                            null,null,
-                            mSwitchSaveWateringState, null);
-                    Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
-                    mRef.child(mKey).updateChildren(dataUpdate)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()) {
-                                        Toast.makeText(SensorDataActivity.this,
-                                                getString(R.string.toast_sensor_data_auto_watering_off),
-                                                Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(SensorDataActivity.this,
-                                                getString(R.string.toast_sensor_data_auto_watering_error),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
-
+                UserData userData = new UserData(null,
+                        null,null,
+                        mSwitchSaveWateringState, null);
+                Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
+                mRef.child(mKey).updateChildren(dataUpdate)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(SensorDataActivity.this,
+                                        getString(R.string.toast_sensor_data_auto_watering_off),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SensorDataActivity.this,
+                                        getString(R.string.toast_sensor_data_auto_watering_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
+
         });
     }
 
+/**
     private void initNotifyDrySwitch() {
         swNotifyCondition.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -274,6 +259,7 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
+ */
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -297,20 +283,17 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                 null, null);
         Map<String, Object> dataUpdate = userData.toMapSensorWateringDuration();
         mRef.child(mKey).updateChildren(dataUpdate)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            Toast.makeText(SensorDataActivity.this,
-                                    (getString(R.string.toast_sensor_data_set_slider_success_1)
-                                    + Math.round(mSliderDuration)
-                                    + getString(R.string.toast_sensor_data_set_slider_success_2)),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(SensorDataActivity.this,
-                                    getString(R.string.toast_sensor_data_set_slider_failed),
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        Toast.makeText(SensorDataActivity.this,
+                                (getString(R.string.toast_sensor_data_set_slider_success_1)
+                                + Math.round(mSliderDuration)
+                                + getString(R.string.toast_sensor_data_set_slider_success_2)),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(SensorDataActivity.this,
+                                getString(R.string.toast_sensor_data_set_slider_failed),
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -338,20 +321,17 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
             Map<String, Object> dataUpdate = userData.toMapSensorData();
 
             mRef.child(mKey).updateChildren(dataUpdate)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(SensorDataActivity.this,
-                                        getString(R.string.toast_sensor_data_update_success),
-                                        Toast.LENGTH_SHORT).show();
-                                startActivity(
-                                        new Intent(SensorDataActivity.this, MainActivity.class));
-                            } else {
-                                Toast.makeText(SensorDataActivity.this,
-                                        getString(R.string.toast_sensor_data_update_failed),
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SensorDataActivity.this,
+                                    getString(R.string.toast_sensor_data_update_success),
+                                    Toast.LENGTH_SHORT).show();
+                            startActivity(
+                                    new Intent(SensorDataActivity.this, MainActivity.class));
+                        } else {
+                            Toast.makeText(SensorDataActivity.this,
+                                    getString(R.string.toast_sensor_data_update_failed),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -362,46 +342,25 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
     private void deleteSensor() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SensorDataActivity.this);
         builder.setMessage(R.string.sensor_data_dialog_delete_msg);
-        builder.setPositiveButton(R.string.sensor_data_dialog_delete_positive_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mRef.child(mKey).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SensorDataActivity.this,
-                                   getString(R.string.toast_sensor_data_dialog_delete),
-                                    Toast.LENGTH_SHORT).show();
-                            Intent intent = (new Intent(SensorDataActivity.this, MainActivity.class));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(SensorDataActivity.this,
-                                    Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        builder.setPositiveButton(R.string.sensor_data_dialog_delete_positive_button, (dialogInterface, i) -> mRef.child(mKey).removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(SensorDataActivity.this,
+                        getString(R.string.toast_sensor_data_dialog_delete),
+                        Toast.LENGTH_SHORT).show();
+                Intent intent = (new Intent(SensorDataActivity.this, MainActivity.class));
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(SensorDataActivity.this,
+                        Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
             }
-        })
-                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
+        }))
+                .setNegativeButton(R.string.dialog_cancel, (dialogInterface, i) -> dialogInterface.dismiss());
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
-    public void hideKeyboard() {
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager manager =
-                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
 }

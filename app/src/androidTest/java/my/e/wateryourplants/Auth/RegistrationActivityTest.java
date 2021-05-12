@@ -6,7 +6,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -251,10 +250,6 @@ public class RegistrationActivityTest {
 
         onView(withText(R.string.toast_dialog_delete_success)).inRoot(new ToastMatcher())
                 .check(matches(withText("Account Deleted")));
-    }
-
-    @After
-    public void tearDown() {
     }
 
 }

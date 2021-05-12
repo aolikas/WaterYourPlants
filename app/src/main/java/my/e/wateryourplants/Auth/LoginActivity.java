@@ -12,7 +12,6 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -35,8 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private String mEmail, mPassword;
-    private Boolean mSaveLogin;
-    private SharedPreferences mPreferences;
     private SharedPreferences.Editor mPreferencesEditor;
 
     private static final String SHARED_PREF_NAME = "checkBoxRememberMe";
@@ -50,10 +47,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         initWidgets();
         mAuth = FirebaseAuth.getInstance();
-        mPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+        SharedPreferences mPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
         mPreferencesEditor = mPreferences.edit();
 
-        mSaveLogin = mPreferences.getBoolean(KEY_SAVE_LOGIN, false);
+        boolean mSaveLogin = mPreferences.getBoolean(KEY_SAVE_LOGIN, false);
 
         if(mSaveLogin) {
             etEmail.setText(mPreferences.getString(KEY_EMAIL, ""));
@@ -61,35 +58,32 @@ public class LoginActivity extends AppCompatActivity {
             cbRememberMe.setChecked(true);
         }
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnLogin.setOnClickListener(view -> {
 
-                progressBar.setVisibility(View.VISIBLE);
-                mEmail = etEmail.getText().toString().trim();
-                mPassword = etPassword.getText().toString().trim();
+            progressBar.setVisibility(View.VISIBLE);
+            mEmail = etEmail.getText().toString().trim();
+            mPassword = etPassword.getText().toString().trim();
 
-                if (TextUtils.isEmpty(mEmail) || TextUtils.isEmpty(mPassword)) {
-                    Toast.makeText(LoginActivity.this,
-                            getString(R.string.toast_error_empty_fields), Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    hideKeyboard();
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()) {
-                    etEmail.setError(getString(R.string.error_invalid_email));
-                    etEmail.requestFocus();
-                    progressBar.setVisibility(View.GONE);
-                    hideKeyboard();
+            if (TextUtils.isEmpty(mEmail) || TextUtils.isEmpty(mPassword)) {
+                Toast.makeText(LoginActivity.this,
+                        getString(R.string.toast_error_empty_fields), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                hideKeyboard();
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()) {
+                etEmail.setError(getString(R.string.error_invalid_email));
+                etEmail.requestFocus();
+                progressBar.setVisibility(View.GONE);
+                hideKeyboard();
+            } else {
+                if (cbRememberMe.isChecked()) {
+                    stayLogIn();
                 } else {
-                    if (cbRememberMe.isChecked()) {
-                        stayLogIn();
-                    } else {
-                      //  removeLogIn();
-                        mPreferencesEditor.clear();
-                        mPreferencesEditor.apply();
-                    }
-
-                    loginUser(mEmail, mPassword);
+                  //  removeLogIn();
+                    mPreferencesEditor.clear();
+                    mPreferencesEditor.apply();
                 }
+
+                loginUser(mEmail, mPassword);
             }
         });
 
@@ -103,49 +97,22 @@ public class LoginActivity extends AppCompatActivity {
             mPreferencesEditor.apply();
     }
 
-    private void removeLogIn() {
-        mPreferencesEditor = mPreferences.edit();
-        mPreferencesEditor.putString(KEY_EMAIL, "");
-        mPreferencesEditor.putString(KEY_PASSWORD, "");
-        mPreferencesEditor.putBoolean(KEY_SAVE_LOGIN, false);
-        mPreferencesEditor.apply();
-        Toast.makeText(LoginActivity.this, "REmove", Toast.LENGTH_SHORT).show();
-    }
-
-    private void checkedSharedPreferences() {
-        mSaveLogin = mPreferences.getBoolean(KEY_SAVE_LOGIN, true);
-        String email = mPreferences.getString(KEY_EMAIL, "default");
-        String password = mPreferences.getString(KEY_PASSWORD, "default");
-
-        etEmail.setText(email);
-        etPassword.setText(password);
-
-        if(mSaveLogin) {
-            cbRememberMe.setChecked(true);
-        } else {
-            cbRememberMe.setChecked(false);
-        }
-    }
-
     private void loginUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this,
-                                    getString(R.string.toast_login_success), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            // startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            //  finish();
-                        } else {
-                            Toast.makeText(LoginActivity.this,
-                                    getString(R.string.toast_login_failed), Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(task -> {
+                    progressBar.setVisibility(View.GONE);
+                    if (task.isSuccessful()) {
+                        Toast.makeText(LoginActivity.this,
+                                getString(R.string.toast_login_success), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        // startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        //  finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this,
+                                getString(R.string.toast_login_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

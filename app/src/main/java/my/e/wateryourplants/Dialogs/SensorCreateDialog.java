@@ -40,36 +40,28 @@ public class SensorCreateDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_create_sensor, null);
 
         builder.setView(view)
-                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .setPositiveButton(R.string.dialog_create, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String name = etSensorName.getText().toString().trim();
-                        String description = etSensorDescription.getText().toString().trim();
+                .setNegativeButton(R.string.dialog_cancel, (dialogInterface, i) -> dialogInterface.dismiss())
+                .setPositiveButton(R.string.dialog_create, (dialogInterface, i) -> {
+                    String name = etSensorName.getText().toString().trim();
+                    String description = etSensorDescription.getText().toString().trim();
 
-                        if(TextUtils.isEmpty(name)) {
-                            Toast.makeText(view.getContext(),
-                                    getString(R.string.toast_dialog_empty_sensor_name),
-                                   Toast.LENGTH_SHORT).show();
-                        } else {
-                            mAuth = FirebaseAuth.getInstance();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            assert user != null;
-                            String userId = user.getUid();
-                            mRef = FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(userId).child("userSensors");
-                            String key = mRef.push().getKey();
+                    if(TextUtils.isEmpty(name)) {
+                        Toast.makeText(view.getContext(),
+                                getString(R.string.toast_dialog_empty_sensor_name),
+                               Toast.LENGTH_SHORT).show();
+                    } else {
+                        mAuth = FirebaseAuth.getInstance();
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        assert user != null;
+                        String userId = user.getUid();
+                        mRef = FirebaseDatabase.getInstance().getReference("Users")
+                                .child(userId).child("userSensors");
+                        String key = mRef.push().getKey();
 
-                            UserData currentUser = new UserData(name, description, 5.0f,
-                                    false, false);
-                            assert key != null;
-                            mRef.child(key).setValue(currentUser);
-                        }
+                        UserData currentUser = new UserData(name, description, 5.0f,
+                                false, false);
+                        assert key != null;
+                        mRef.child(key).setValue(currentUser);
                     }
                 });
 

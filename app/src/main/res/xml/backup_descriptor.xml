@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+
+    <!-- Exclude the shared preferences file that contains the GCM registrationId -->
+    <exclude
+        domain="sharedpref"
+        path="checkBoxRememberMe.xml" />
+    <exclude
+        domain="sharedpref"
+        path="IntroPrefManagerTest.xml" />
+    <exclude
+        domain="sharedpref"
+        path="pref.xml" />
+    <exclude
+        domain="sharedpref"
+        path="my.e.wateryourplants.IntroSlide.xml" />
+    <exclude
+        domain="sharedpref"
+        path="my.e.wateryourplants.xml" />
+</full-backup-content>

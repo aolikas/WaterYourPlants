@@ -46,7 +46,6 @@
     <string name="sensor_data_dialog_delete_positive_button">Delete</string>
     <string name="sensor_data_btn_copy_sensor_id">Copy Sensor Id</string>
     <string name="sensor_data_watering_title">Watering</string>
-    <string name="sensor_data_btn_turn_on">turn pump on</string>
     <string name="sensor_data_watering_duration">set a duration in seconds</string>
     <string name="sensor_data_watering_automatic">Automatic Watering</string>
     <string name="sensor_data_editing_title">Editing</string>
@@ -80,6 +79,17 @@
     <string name="error_invalid_email">Please provide a valid email</string>
     <string name="error_invalid_password">Password should be at least 6 characters</string>
     <string name="error_empty_sensor_name">Please give your sensor a name</string>
+
+    <string name="intro_btn_next">Next</string>
+    <string name="intro_screen_one_sen_1">Hello, this App is a part of the IoT project</string>
+    <string name="intro_screen_one_sen_2">Water Your Plants</string>
+    <string name="intro_screen_two_sen_1">Unfortunately, you cannot use this App</string>
+    <string name="intro_screen_two_sen_2">because it\'s for demo purposes.</string>
+    <string name="intro_screen_two_sen_3">But you can use a source code.</string>
+    <string name="intro_screen_three_sen_1">For further information</string>
+    <string name="intro_screen_three_sen_2">read About App in the main menu</string>
+    <string name="intro_btn_start">Get started</string>
+    <string name="intro_btn_skip">Skip</string>
 
 
 </resources>

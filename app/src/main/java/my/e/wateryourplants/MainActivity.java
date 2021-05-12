@@ -2,18 +2,11 @@ package my.e.wateryourplants;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +24,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import my.e.wateryourplants.Auth.LoginActivity;
 import my.e.wateryourplants.Auth.StartActivity;
 import my.e.wateryourplants.Dialogs.SensorCreateDialog;
 import my.e.wateryourplants.Model.UserData;
@@ -41,15 +33,8 @@ import my.e.wateryourplants.ViewHolder.MyViewHolder;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mRef;
     private RecyclerView mRecyclerView;
     private FirebaseRecyclerAdapter<UserData, MyViewHolder> mAdapter;
-    private static final String SHARED_PREF_NAME = "checkBoxRememberMe";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_PASSWORD = "password";
-    private static final String KEY_SAVE_LOGIN = "save_login";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,28 +42,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FloatingActionButton fab = findViewById(R.id.main_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openCreateSensorDialog();
-            }
-        });
-
+        fab.setOnClickListener(view -> openCreateSensorDialog());
 
         initRecyclerView();
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser mUser = mAuth.getCurrentUser();
         assert mUser != null;
         String userId = mUser.getUid();
-        mRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("userSensors");
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("userSensors");
 
         FirebaseRecyclerOptions<UserData> options = new FirebaseRecyclerOptions.Builder<UserData>()
                 .setQuery(mRef, UserData.class)
                 .build();
 
         mAdapter = new FirebaseRecyclerAdapter<UserData, MyViewHolder>(options) {
-            @SuppressLint("DefaultLocale")
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull UserData model) {
                 String key = getRef(position).getKey();
@@ -86,13 +64,10 @@ public class MainActivity extends AppCompatActivity {
                 holder.sensorDescription.setText(model.getUserSensorDescription());
                 holder.sensorMoistureCondition.setText(model.getUserSensorMoistureCondition());
                 holder.sensorTemperature.setText(String.format("%.2f",model.getUserSensorTemperature()));
-                holder.view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(), SensorDataActivity.class);
-                        intent.putExtra("key", key);
-                        startActivity(intent);
-                    }
+                holder.view.setOnClickListener(view -> {
+                    Intent intent = new Intent(getApplicationContext(), SensorDataActivity.class);
+                    intent.putExtra("key", key);
+                    startActivity(intent);
                 });
 
             }
@@ -118,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //   mRecyclerView.setHasFixedSize(true);
     }
-
 
 
     private void openCreateSensorDialog() {
@@ -167,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAdapter.startListening();
+
     }
 
     @Override
