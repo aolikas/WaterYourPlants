@@ -91,6 +91,13 @@
     <string name="intro_btn_start">Get started</string>
     <string name="intro_btn_skip">Skip</string>
     <string name="menu_main_about_app">About App</string>
+    <string name="about_app_title">Water Your Plants</string>
+    <string name="about_app_part_1">is an IoT project (Arduino moisture soil sensors and water pumps, Android App to configure these).</string>
+    <string name="about_app_part_2">This particular App is an example, you can download a source code from here:</string>
+    <string name="about_app_link_project">https://github.com/aolikas/WaterYourPlants.git</string>
+    <string name="about_app_btn_copy_link_description">Copy a link project</string>
+    <string name="about_app_part_3">All details describe in Read.me file. Also all Arduino sketches with annotation on this link below:</string>
+    <string name="about_app_link_arduino">https://github.com/aolikas/WaterYourPlantsAduino.git</string>
 
 
 </resources>

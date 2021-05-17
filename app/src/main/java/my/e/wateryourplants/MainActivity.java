@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import my.e.wateryourplants.Auth.StartActivity;
 import my.e.wateryourplants.Dialogs.SensorCreateDialog;
 import my.e.wateryourplants.Model.UserData;
+import my.e.wateryourplants.ShowDetails.AboutAppActivity;
 import my.e.wateryourplants.ShowDetails.SensorDataActivity;
 import my.e.wateryourplants.ShowDetails.UserAccountActivity;
 import my.e.wateryourplants.ViewHolder.MyViewHolder;
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.about_app:
+                startActivity(new Intent(MainActivity.this, AboutAppActivity.class));
                 return true;
 
                 default:
