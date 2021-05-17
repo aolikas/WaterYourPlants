@@ -90,6 +90,7 @@
     <string name="intro_screen_three_sen_2">read About App in the main menu</string>
     <string name="intro_btn_start">Get started</string>
     <string name="intro_btn_skip">Skip</string>
+    <string name="menu_main_about_app">About App</string>
 
 
 </resources>

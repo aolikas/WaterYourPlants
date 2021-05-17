@@ -8,8 +8,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/about_app"
+        android:title="@string/menu_main_about_app"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/log_out"
         android:title="@string/menu_main_log_out"
         app:showAsAction="never" />
-
 </menu>
