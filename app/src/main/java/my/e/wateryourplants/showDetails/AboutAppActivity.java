@@ -1,4 +1,4 @@
-package my.e.wateryourplants.ShowDetails;
+package my.e.wateryourplants.showDetails;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -50,7 +50,8 @@ public class AboutAppActivity extends AppCompatActivity implements View.OnClickL
                 tvLinkArduino.getText().toString());
         mClipboardManager.setPrimaryClip(mClipData);
         Toast.makeText(this, getString(R.string.toast_about_add_copied_success),
-                Toast.LENGTH_SHORT).show();}
+                Toast.LENGTH_SHORT).show();
+    }
 
     @SuppressLint("NonConstantResourceId")
     @Override

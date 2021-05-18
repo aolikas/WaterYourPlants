@@ -1,6 +1,6 @@
-package my.e.wateryourplants.Auth;
+package my.e.wateryourplants.auth;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -16,10 +16,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import my.e.wateryourplants.MainActivity;
@@ -52,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
         boolean mSaveLogin = mPreferences.getBoolean(KEY_SAVE_LOGIN, false);
 
-        if(mSaveLogin) {
+        if (mSaveLogin) {
             etEmail.setText(mPreferences.getString(KEY_EMAIL, ""));
             etPassword.setText(mPreferences.getString(KEY_PASSWORD, ""));
             cbRememberMe.setChecked(true);
@@ -78,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (cbRememberMe.isChecked()) {
                     stayLogIn();
                 } else {
-                  //  removeLogIn();
+                    //  removeLogIn();
                     mPreferencesEditor.clear();
                     mPreferencesEditor.apply();
                 }
@@ -89,12 +86,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
     private void stayLogIn() {
-            mPreferencesEditor.putString(KEY_EMAIL, mEmail);
-            mPreferencesEditor.putString(KEY_PASSWORD, mPassword);
-            mPreferencesEditor.putBoolean(KEY_SAVE_LOGIN, true);
-            mPreferencesEditor.apply();
+        mPreferencesEditor.putString(KEY_EMAIL, mEmail);
+        mPreferencesEditor.putString(KEY_PASSWORD, mPassword);
+        mPreferencesEditor.putBoolean(KEY_SAVE_LOGIN, true);
+        mPreferencesEditor.apply();
     }
 
     private void loginUser(String email, String password) {

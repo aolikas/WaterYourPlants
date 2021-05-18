@@ -1,4 +1,4 @@
-package my.e.wateryourplants.IntroSlide;
+package my.e.wateryourplants.introSlide;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

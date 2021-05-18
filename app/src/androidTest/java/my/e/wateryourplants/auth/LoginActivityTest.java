@@ -1,4 +1,4 @@
-package my.e.wateryourplants.Auth;
+package my.e.wateryourplants.auth;
 
 import android.content.Context;
 import android.content.SharedPreferences;

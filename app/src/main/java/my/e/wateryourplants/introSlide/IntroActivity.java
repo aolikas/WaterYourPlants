@@ -1,4 +1,4 @@
-package my.e.wateryourplants.IntroSlide;
+package my.e.wateryourplants.introSlide;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import my.e.wateryourplants.Auth.StartActivity;
+import my.e.wateryourplants.auth.StartActivity;
 import my.e.wateryourplants.R;
 
 public class IntroActivity extends AppCompatActivity implements View.OnClickListener {

@@ -1,4 +1,4 @@
-package my.e.wateryourplants.Auth;
+package my.e.wateryourplants.auth;
 
 
 import androidx.test.core.app.ApplicationProvider;

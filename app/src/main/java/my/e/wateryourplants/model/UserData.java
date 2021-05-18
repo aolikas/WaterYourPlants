@@ -1,4 +1,4 @@
-package my.e.wateryourplants.Model;
+package my.e.wateryourplants.model;
 
 import com.google.firebase.database.Exclude;
 

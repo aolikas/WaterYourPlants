@@ -1,7 +1,6 @@
-package my.e.wateryourplants.Dialogs;
+package my.e.wateryourplants.dialogs;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
-import my.e.wateryourplants.Model.UserData;
+import my.e.wateryourplants.model.UserData;
 import my.e.wateryourplants.R;
 
 public class SensorCreateDialog extends AppCompatDialogFragment {
@@ -45,10 +44,10 @@ public class SensorCreateDialog extends AppCompatDialogFragment {
                     String name = etSensorName.getText().toString().trim();
                     String description = etSensorDescription.getText().toString().trim();
 
-                    if(TextUtils.isEmpty(name)) {
+                    if (TextUtils.isEmpty(name)) {
                         Toast.makeText(view.getContext(),
                                 getString(R.string.toast_dialog_empty_sensor_name),
-                               Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_SHORT).show();
                     } else {
                         mAuth = FirebaseAuth.getInstance();
                         FirebaseUser user = mAuth.getCurrentUser();

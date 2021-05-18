@@ -1,4 +1,4 @@
-package my.e.wateryourplants.ShowDetails;
+package my.e.wateryourplants.showDetails;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,7 +8,7 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -18,8 +18,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,9 +30,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Map;
 import java.util.Objects;
 
-import my.e.wateryourplants.Auth.StartActivity;
+import my.e.wateryourplants.auth.StartActivity;
 import my.e.wateryourplants.MainActivity;
-import my.e.wateryourplants.Model.UserData;
+import my.e.wateryourplants.model.UserData;
 import my.e.wateryourplants.R;
 
 public class UserAccountActivity extends AppCompatActivity implements View.OnClickListener {
@@ -144,7 +142,7 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         String name = Objects.requireNonNull(etUserName.getText()).toString().trim();
         String email = Objects.requireNonNull(etUserEmail.getText()).toString().trim();
 
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             etUserEmail.setError(getString(R.string.error_invalid_email));
             etUserEmail.requestFocus();
         } else {

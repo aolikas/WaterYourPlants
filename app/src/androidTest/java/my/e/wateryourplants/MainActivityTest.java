@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import org.junit.runner.RunWith;
 
-import my.e.wateryourplants.Auth.LoginActivity;
+import my.e.wateryourplants.auth.LoginActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -33,7 +33,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static my.e.wateryourplants.Auth.LoginActivityTest.setChecked;
+import static my.e.wateryourplants.auth.LoginActivityTest.setChecked;
 
 
 @RunWith(AndroidJUnit4.class)

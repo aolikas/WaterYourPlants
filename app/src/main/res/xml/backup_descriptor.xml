@@ -13,7 +13,7 @@
         path="pref.xml" />
     <exclude
         domain="sharedpref"
-        path="my.e.wateryourplants.IntroSlide.xml" />
+        path="my.e.wateryourplants.introSlide.xml" />
     <exclude
         domain="sharedpref"
         path="my.e.wateryourplants.xml" />

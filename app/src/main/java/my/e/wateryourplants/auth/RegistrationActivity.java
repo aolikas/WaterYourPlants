@@ -1,6 +1,6 @@
-package my.e.wateryourplants.Auth;
+package my.e.wateryourplants.auth;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -15,9 +15,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Objects;
 
 import my.e.wateryourplants.MainActivity;
-import my.e.wateryourplants.Model.UserData;
+import my.e.wateryourplants.model.UserData;
 import my.e.wateryourplants.R;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -90,7 +87,8 @@ public class RegistrationActivity extends AppCompatActivity {
                             if (task1.isSuccessful()) {
                                 Toast.makeText(RegistrationActivity.this,
                                         getString(R.string.toast_reg_success), Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                                Intent intent = new Intent(RegistrationActivity.this,
+                                        MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
@@ -101,7 +99,8 @@ public class RegistrationActivity extends AppCompatActivity {
                         });
                     } else {
                         Toast.makeText(RegistrationActivity.this,
-                                Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                                Objects.requireNonNull(task.getException()).getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
 
                 });

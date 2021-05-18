@@ -12,30 +12,30 @@
         android:roundIcon="@mipmap/ic_launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.WaterYourPlants">
-        <activity android:name=".ShowDetails.AboutAppActivity"
+        <activity android:name=".showDetails.AboutAppActivity"
             android:parentActivityName=".MainActivity"/>
-        <activity android:name=".IntroSlide.IntroActivity">
+        <activity android:name=".introSlide.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ShowDetails.SensorDataActivity"
+            android:name=".showDetails.SensorDataActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".ShowDetails.UserAccountActivity"
+            android:name=".showDetails.UserAccountActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".Auth.ResetPasswordActivity"
-            android:parentActivityName=".Auth.StartActivity" />
+            android:name=".auth.ResetPasswordActivity"
+            android:parentActivityName=".auth.StartActivity" />
         <activity
-            android:name=".Auth.RegistrationActivity"
-            android:parentActivityName=".Auth.StartActivity" />
+            android:name=".auth.RegistrationActivity"
+            android:parentActivityName=".auth.StartActivity" />
         <activity
-            android:name=".Auth.LoginActivity"
-            android:parentActivityName=".Auth.StartActivity" />
-        <activity android:name=".Auth.StartActivity"/>
+            android:name=".auth.LoginActivity"
+            android:parentActivityName=".auth.StartActivity" />
+        <activity android:name=".auth.StartActivity"/>
         <activity android:name=".MainActivity" />
     </application>
 

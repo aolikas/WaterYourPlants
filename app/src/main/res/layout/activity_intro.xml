@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".IntroSlide.IntroActivity">
+    tools:context=".introSlide.IntroActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/intro_view_pager"
@@ -34,4 +34,4 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/gray_dark"
         android:text="@string/intro_btn_skip" />
-</FrameLayout>
+</merge>

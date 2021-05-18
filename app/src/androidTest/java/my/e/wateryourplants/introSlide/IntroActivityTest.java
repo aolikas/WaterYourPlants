@@ -1,4 +1,4 @@
-package my.e.wateryourplants.IntroSlide;
+package my.e.wateryourplants.introSlide;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;

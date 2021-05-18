@@ -1,6 +1,6 @@
-package my.e.wateryourplants.Auth;
+package my.e.wateryourplants.auth;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -14,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
@@ -42,12 +40,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
         btnReset.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);
             String txtEmail = etEmail.getText().toString().trim();
-            if(TextUtils.isEmpty(txtEmail)) {
+            if (TextUtils.isEmpty(txtEmail)) {
                 Toast.makeText(ResetPasswordActivity.this,
                         getString(R.string.toast_error_empty_fields), Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 hideKeyboard();
-            } else if(!Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches()) {
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches()) {
                 etEmail.setError(getString(R.string.error_invalid_email));
                 progressBar.setVisibility(View.GONE);
                 hideKeyboard();

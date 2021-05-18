@@ -1,4 +1,4 @@
-package my.e.wateryourplants.ShowDetails;
+package my.e.wateryourplants.showDetails;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import my.e.wateryourplants.Auth.LoginActivity;
+import my.e.wateryourplants.auth.LoginActivity;
 import my.e.wateryourplants.ToastMatcher;
 import my.e.wateryourplants.R;
 
@@ -32,7 +32,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static my.e.wateryourplants.Auth.LoginActivityTest.setChecked;
+import static my.e.wateryourplants.auth.LoginActivityTest.setChecked;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

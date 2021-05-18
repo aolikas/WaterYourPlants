@@ -26,13 +26,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Locale;
 
-import my.e.wateryourplants.Auth.StartActivity;
-import my.e.wateryourplants.Dialogs.SensorCreateDialog;
-import my.e.wateryourplants.Model.UserData;
-import my.e.wateryourplants.ShowDetails.AboutAppActivity;
-import my.e.wateryourplants.ShowDetails.SensorDataActivity;
-import my.e.wateryourplants.ShowDetails.UserAccountActivity;
-import my.e.wateryourplants.ViewHolder.MyViewHolder;
+import my.e.wateryourplants.auth.StartActivity;
+import my.e.wateryourplants.dialogs.SensorCreateDialog;
+import my.e.wateryourplants.model.UserData;
+import my.e.wateryourplants.showDetails.AboutAppActivity;
+import my.e.wateryourplants.showDetails.SensorDataActivity;
+import my.e.wateryourplants.showDetails.UserAccountActivity;
+import my.e.wateryourplants.viewHolder.MyViewHolder;
 
 public class MainActivity extends AppCompatActivity {
 

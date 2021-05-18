@@ -1,4 +1,4 @@
-package my.e.wateryourplants.ViewHolder;
+package my.e.wateryourplants.viewHolder;
 
 import android.view.View;
 import android.widget.TextView;
