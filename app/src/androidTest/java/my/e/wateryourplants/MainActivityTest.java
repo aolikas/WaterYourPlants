@@ -53,7 +53,32 @@ public class MainActivityTest {
 
     // checking a main menu items
     @Test
-    public void testMenuItems() {
+    public void testMenuItems() throws InterruptedException {
+
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(2000);
         // open menu
         openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
 
@@ -69,6 +94,7 @@ public class MainActivityTest {
         onView(withText(R.string.menu_main_about_app))
                 .perform(click());
         pressBack();
+
     }
 
     // login, clicking on Fab, checking all textView amd editTexts, Buttons

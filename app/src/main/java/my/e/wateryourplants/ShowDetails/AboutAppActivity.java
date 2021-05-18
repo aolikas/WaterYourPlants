@@ -7,6 +7,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ public class AboutAppActivity extends AppCompatActivity implements View.OnClickL
 
     private TextView tvLinkProject, tvLinkArduino;
     private ClipboardManager mClipboardManager;
+    private ClipData mClipData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,16 @@ public class AboutAppActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void copyLinkProject() {
-        ClipData mClipData = ClipData.newPlainText("linkProject",
+        mClipData = ClipData.newPlainText("linkProject",
                 tvLinkProject.getText().toString());
         mClipboardManager.setPrimaryClip(mClipData);
         Toast.makeText(this, "Project",
                 Toast.LENGTH_SHORT).show();
+
+        ClipData data = mClipboardManager.getPrimaryClip();
+        ClipData.Item item = data.getItemAt(0);
+        String res = item.getText().toString();
+        Log.d("TAG", res);
     }
 
     private void copyLinkArduino() { ClipData mClipData = ClipData.newPlainText("linkArduino",
