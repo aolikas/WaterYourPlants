@@ -4,10 +4,12 @@ package my.e.wateryourplants;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,12 +45,14 @@ public class MainActivityTest {
     public ActivityScenarioRule<LoginActivity> rule =
             new ActivityScenarioRule<>(LoginActivity.class);
 
+
     @Before
     public void setUp() {
         email = "test@test.ru";
         password = "1234567";
         name = "This is a sensor name";
         description = "This is a sensor description";
+        Intents.init();
     }
 
     // checking a main menu items
@@ -359,5 +363,43 @@ public class MainActivityTest {
         onView(withText("Sensor 3 Description")).check(matches(isDisplayed()));
 
         pressBack();
+    }
+
+    // login, testing recycler view in a specific position, scrolling to position
+    @Test
+    public void testIntents() throws InterruptedException {
+
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(2000);
+
+        onView(withId(R.id.main_recycler_view)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+    }
+
+    @After
+    public void tearDown() {
+        Intents.release();
     }
 }

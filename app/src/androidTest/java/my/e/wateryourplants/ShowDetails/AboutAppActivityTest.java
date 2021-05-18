@@ -115,6 +115,66 @@ public class AboutAppActivityTest {
                 .check(matches(isEnabled())).check(matches(isClickable()));
     }
 
+    // checking all views matching
+    @Test
+    public void testImageButtons() throws InterruptedException {
+
+        onView(withId(R.id.login_cb_remember_me)).perform(setChecked());
+
+        //type name, email, password to a specific EditText and check it
+        onView(withId(R.id.login_et_email)).perform(clearText(),
+                typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.login_et_email)).check(matches(withText("test@test.ru")));
+        onView(withId(R.id.login_et_password)).perform(clearText(),
+                typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login_et_password)).check(matches(withText("1234567")));
+
+        // find a CheckBox and set it Checked
+        onView(withId(R.id.login_cb_remember_me)).check(matches(isNotChecked()));
+        onView(withId(R.id.login_cb_remember_me)).perform(click());
+
+        //click to Login Button
+        onView(withId(R.id.login_btn_login)).perform(click());
+
+        // check Toast - Login Success
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_login_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Login is successful")));
+
+        Thread.sleep(2000);
+
+        // open menu
+        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
+
+        // check item menu and click
+        onView(withText(R.string.menu_main_about_app)).check(matches(withText("About App")));
+        onView(withText(R.string.menu_main_about_app))
+                .perform(click());
+
+        Thread.sleep(2000);
+
+        // find Copy ImageViews and click
+        onView(withId(R.id.about_app_btn_copy_link_project)).perform(click());
+
+        // check Toast - Copied Success
+        onView(withText(R.string.toast_about_add_copied_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_about_add_copied_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Link successfully copied")));
+
+        Thread.sleep(2000);
+
+        // find Copy ImageViews and click
+        onView(withId(R.id.about_app_btn_copy_link_arduino)).perform(click());
+
+        // check Toast - Copied Success
+        onView(withText(R.string.toast_about_add_copied_success)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.toast_about_add_copied_success)).inRoot(new ToastMatcher())
+                .check(matches(withText("Link successfully copied")));
+    }
+
     @Test
     public void testAccessText() {
         String test = "test";

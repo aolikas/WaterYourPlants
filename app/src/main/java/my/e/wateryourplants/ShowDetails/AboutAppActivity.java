@@ -7,7 +7,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,19 +41,15 @@ public class AboutAppActivity extends AppCompatActivity implements View.OnClickL
         mClipData = ClipData.newPlainText("linkProject",
                 tvLinkProject.getText().toString());
         mClipboardManager.setPrimaryClip(mClipData);
-        Toast.makeText(this, "Project",
+        Toast.makeText(this, getString(R.string.toast_about_add_copied_success),
                 Toast.LENGTH_SHORT).show();
-
-        ClipData data = mClipboardManager.getPrimaryClip();
-        ClipData.Item item = data.getItemAt(0);
-        String res = item.getText().toString();
-        Log.d("TAG", res);
     }
 
-    private void copyLinkArduino() { ClipData mClipData = ClipData.newPlainText("linkArduino",
-            tvLinkArduino.getText().toString());
+    private void copyLinkArduino() {
+        mClipData = ClipData.newPlainText("linkArduino",
+                tvLinkArduino.getText().toString());
         mClipboardManager.setPrimaryClip(mClipData);
-        Toast.makeText(this, "Arduino",
+        Toast.makeText(this, getString(R.string.toast_about_add_copied_success),
                 Toast.LENGTH_SHORT).show();}
 
     @SuppressLint("NonConstantResourceId")

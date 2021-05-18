@@ -18,6 +18,7 @@
 
     <string name="menu_main_log_out">Log Out</string>
     <string name="menu_main_account_details">Account details</string>
+    <string name="menu_main_about_app">About App</string>
 
     <string name="fab_description">Add new sensor</string>
 
@@ -74,6 +75,7 @@
     <string name="toast_sensor_data_update_success">Sensor Data updated</string>
     <string name="toast_sensor_data_update_failed">Something is wrong. Updating impossible</string>
     <string name="toast_sensor_data_dialog_delete">Sensor deleted</string>
+    <string name="toast_about_add_copied_success">Link successfully copied</string>
 
 
     <string name="error_invalid_email">Please provide a valid email</string>
@@ -90,7 +92,7 @@
     <string name="intro_screen_three_sen_2">read About App in the main menu</string>
     <string name="intro_btn_start">Get started</string>
     <string name="intro_btn_skip">Skip</string>
-    <string name="menu_main_about_app">About App</string>
+
     <string name="about_app_title">Water Your Plants</string>
     <string name="about_app_part_1">is an IoT project (Arduino moisture soil sensors and water pumps, Android App to configure these).</string>
     <string name="about_app_part_2">This particular App is an example, you can download a source code from here:</string>
@@ -98,6 +100,5 @@
     <string name="about_app_btn_copy_link_description">Copy a link project</string>
     <string name="about_app_part_3">All details describe in Read.me file. Also all Arduino sketches with annotation on this link below:</string>
     <string name="about_app_link_arduino">https://github.com/aolikas/WaterYourPlantsAduino.git</string>
-
 
 </resources>

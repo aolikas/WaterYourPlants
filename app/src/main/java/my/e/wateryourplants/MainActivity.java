@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 holder.sensorMoistureCondition.setText(model.getUserSensorMoistureCondition());
                 holder.sensorTemperature.setText(String.format(Locale.GERMANY,
                         "%.2f",model.getUserSensorTemperature()));
+
                 holder.view.setOnClickListener(view -> {
                     Intent intent = new Intent(getApplicationContext(), SensorDataActivity.class);
                     intent.putExtra("key", key);
@@ -149,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAdapter.startListening();
-
     }
 
     @Override

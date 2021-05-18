@@ -1,8 +1,13 @@
 package my.e.wateryourplants.ShowDetails;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,21 +34,27 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static my.e.wateryourplants.Auth.LoginActivityTest.setChecked;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(AndroidJUnit4.class)
 public class UserAccountActivityTest {
 
+    private ClipboardManager clipboardManager;
+    private ClipData clipData;
+    private Context context;
+    private String name, email, password;
+
     @Rule
     public ActivityScenarioRule<LoginActivity> rule =
             new ActivityScenarioRule<>(LoginActivity.class);
-
-    String name, email, password;
 
     @Before
     public void setUp() {
         name = "Sam";
         email = "test@test.ru";
         password = "1234567";
+        context = InstrumentationRegistry.getInstrumentation().getContext();
     }
 
 
@@ -479,6 +490,37 @@ public class UserAccountActivityTest {
 
         // click on Cancel Button
         onView(withText(R.string.dialog_cancel)).perform(click());
+    }
+
+    @Test
+    public void testAccessText() {
+        String test = "test_id";
+        CharSequence textToPaste;
+        clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipData = ClipData.newPlainText("text", test);
+        clipboardManager.setPrimaryClip(clipData);
+
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        try {
+            textToPaste = clipboard.getPrimaryClip().getItemAt(0).getText();
+        } catch (Exception e) {
+            return;
+        }
+
+        assertEquals(test, textToPaste);
+    }
+
+    @Test
+    public void testHasText() {
+        clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        clipData = ClipData.newPlainText("text", "");
+        clipboardManager.setPrimaryClip(clipData);
+        assertFalse(clipboardManager.hasPrimaryClip());
+
+        clipData = ClipData.newPlainText("text", null);
+        clipboardManager.setPrimaryClip(clipData);
+        assertFalse(clipboardManager.hasPrimaryClip());
     }
 
 }
