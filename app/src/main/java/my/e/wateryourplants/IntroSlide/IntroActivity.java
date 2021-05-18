@@ -23,7 +23,6 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
     private int[] mLayouts;
     private IntroPrefManager mPrefManager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

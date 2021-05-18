@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Locale;
+
 import my.e.wateryourplants.Auth.StartActivity;
 import my.e.wateryourplants.Dialogs.SensorCreateDialog;
 import my.e.wateryourplants.Model.UserData;
@@ -61,10 +63,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull UserData model) {
                 String key = getRef(position).getKey();
-                holder.sensorName.setText("" + model.getUserSensorName());
+                holder.sensorName.setText(model.getUserSensorName()); // "" +
                 holder.sensorDescription.setText(model.getUserSensorDescription());
                 holder.sensorMoistureCondition.setText(model.getUserSensorMoistureCondition());
-                holder.sensorTemperature.setText(String.format("%.2f",model.getUserSensorTemperature()));
+                holder.sensorTemperature.setText(String.format(Locale.GERMANY,
+                        "%.2f",model.getUserSensorTemperature()));
                 holder.view.setOnClickListener(view -> {
                     Intent intent = new Intent(getApplicationContext(), SensorDataActivity.class);
                     intent.putExtra("key", key);

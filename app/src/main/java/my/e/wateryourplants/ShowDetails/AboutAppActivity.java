@@ -8,7 +8,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +27,6 @@ public class AboutAppActivity extends AppCompatActivity implements View.OnClickL
         mClipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
-    @SuppressLint("WrongViewCast")
     private void initViews() {
         tvLinkProject = findViewById(R.id.about_app_link_project);
         tvLinkArduino = findViewById(R.id.about_app_link_arduino);

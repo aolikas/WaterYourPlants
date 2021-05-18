@@ -43,7 +43,6 @@ public class MainActivityTest {
     public ActivityScenarioRule<LoginActivity> rule =
             new ActivityScenarioRule<>(LoginActivity.class);
 
-
     @Before
     public void setUp() {
         email = "test@test.ru";
@@ -55,12 +54,19 @@ public class MainActivityTest {
     // checking a main menu items
     @Test
     public void testMenuItems() {
-
+        // open menu
         openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
 
         onView(withText(R.string.menu_main_log_out)).check(matches(withText("Log Out")));
         onView(withText(R.string.menu_main_account_details)).check(matches(withText("Account details")));
         onView(withText(R.string.menu_main_account_details))
+                .perform(click());
+        pressBack();
+
+        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
+
+        onView(withText(R.string.menu_main_about_app)).check(matches(withText("About App")));
+        onView(withText(R.string.menu_main_about_app))
                 .perform(click());
         pressBack();
     }

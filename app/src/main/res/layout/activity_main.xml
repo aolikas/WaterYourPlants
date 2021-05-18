@@ -18,7 +18,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
-        android:backgroundTint="@color/red"
+        android:backgroundTint="@color/main"
         android:contentDescription="@string/fab_description"
         android:src="@drawable/ic_baseline_add" />
 
