@@ -14,5 +14,9 @@ Arduino sketch for controlling water pump. All Arduino sketches locate in a diff
  1. Install Android Studio, if you don't already have it.
  2. Download the sample.
  3. Import the sample into Android Studio.
- 4. Build and run the sample.
- 5. 
+ 4. Add Firebase to this Projects. [Here more detailed instruction.](https://firebase.google.com/docs/android/setup)
+ 5. During the App registration in the Android package name enter:
+    ```
+  my.e.wateryourplants
+  ```
+
