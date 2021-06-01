@@ -16,7 +16,24 @@ Arduino sketch for controlling water pump. All Arduino sketches locate in a diff
  3. Import the sample into Android Studio.
  4. Add Firebase to this Projects. [Here more detailed instruction.](https://firebase.google.com/docs/android/setup)
  5. During the App registration in the Android package name enter:
-  ```
-  my.e.wateryourplants
-  ```
+    ```
+    my.e.wateryourplants
+    ```
+ 6. Download google-services.json file and move it into the app-level directory of the App.
+ 7. Within your Firebase Project select the Authentication panel and click the Get started.
+ 8. Click Email/Password and turn on the first Enable switch and click Save.
+ 9. Then in your Firebase Project select the Realtime Database panel and click the Create Database.
+ 10. Choose mode for your database.
+ 11. Database Rules
+     {
+      "rules" : {
+      // User profiles are only readable and writable by the user who owns it
+      "Users" : {
+      "$user_id" : {
+        ".write" : "$user_id === auth.uid && auth !== null",
+        ".read" :  "$user_id === auth.uid && auth !== null"
+         }
+       }
+      }
+     }
 
