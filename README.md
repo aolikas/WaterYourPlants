@@ -25,6 +25,7 @@ Arduino sketch for controlling water pump. All Arduino sketches locate in a diff
  9. Then in your Firebase Project select the Realtime Database panel and click the Create Database.
  10. Choose mode for your database.
  11. Database Rules
+     ```
      {
       "rules" : {
       // User profiles are only readable and writable by the user who owns it
@@ -36,4 +37,5 @@ Arduino sketch for controlling water pump. All Arduino sketches locate in a diff
        }
       }
      }
-
+     ```
+     
