@@ -39,8 +39,8 @@ Arduino sketch for controlling water pump. All Arduino sketches locate in a diff
      }
      ```
  12. In Android Studio check Firebase connection Tools/Firebase/Realtime Database/ Get started with Realmtime Databse    
- 12. Build and run project in Android Studio. 
- 13. If everything is ok, go to Build/ Generate Signed Bundle/APK and generate this Project.
- 14. Download APK to your phone (don't forget turn on Developer options on your phone).
- 15. Run the App. Register/login user.
- 16. Next step is Arduino sketches and sensors. Go to the [WaterYourPlantsArduino](https://github.com/aolikas/WaterYourPlantsAduino)
+ 13. Build and run project in Android Studio. 
+ 14. If everything is ok, go to Build/ Generate Signed Bundle/APK and generate this Project.
+ 15. Download APK to your phone (don't forget turn on Developer options on your phone).
+ 16. Run the App. Register/login user.
+ 17. Next step is Arduino sketches and sensors. Go to the [WaterYourPlantsArduino](https://github.com/aolikas/WaterYourPlantsAduino)
