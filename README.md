@@ -1,6 +1,6 @@
 # WaterYourPlants
 This folder contains the source code for the Water Your Plants App.
-As an examample, this App is launched on PlayStore. 
+As an example, this App is launched on PlayStore. 
 
 # Introduction
 Water Your Plants is an IoT project for automatic watering any plants. 
