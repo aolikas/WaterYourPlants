@@ -41,17 +41,24 @@
     <string name="sensor_data_id_title">Sensor Id</string>
     <string name="sensor_data_btn_update">Update</string>
     <string name="sensor_data_btn_delete">Delete Sensor</string>
+    <string name="sensor_data_btn_start_watering">Start Watering</string>
+    <string name="sensor_data_btn_start_watering_off">Turn Auto Watering Off</string>
+
 
 
     <string name="sensor_data_dialog_delete_msg">Are you sure you want to delete this sensor?</string>
     <string name="sensor_data_dialog_delete_positive_button">Delete</string>
     <string name="sensor_data_btn_copy_sensor_id">Copy Sensor Id</string>
     <string name="sensor_data_watering_title">Watering</string>
-    <string name="sensor_data_watering_duration">set a duration in seconds</string>
-    <string name="sensor_data_watering_automatic">Automatic Watering</string>
+    <string name="sensor_data_watering_duration">set duration from 5 to 30 seconds</string>
+    <string name="sensor_data_watering_auto">Auto Watering</string>
     <string name="sensor_data_editing_title">Editing</string>
     <string name="cb_remember_me">Remember me</string>
     <string name="sensor_data_watering_notify">Notify about dry condition</string>
+    <string name="sensor_data_sleep_mode_title">Set up sleep mode</string>
+    <string name="sensor_data_sleep_mode_description">set sleep mode time from 5 to 60 minutes</string>
+    <string name="sensor_data_sleep_mode_auto">Auto Sleep Mode</string>
+
 
     <string name="toast_error_empty_fields">Please fill all required fields</string>
     <string name="toast_reg_success">Registration is successful</string>
@@ -66,16 +73,20 @@
     <string name="toast_update_failed">Something is wrong</string>
     <string name="toast_copy_id_success">User Id successfully copied</string>
     <string name="toast_sensor_data_copy_id_success">Sensor Id successfully copied</string>
-    <string name="toast_sensor_data_set_slider_success_1">"Watering duration successfully sets for "</string>
-    <string name="toast_sensor_data_set_slider_success_2">" sec"</string>
+    <string name="toast_sensor_data_set_watering_slider_success_1">"Watering duration successfully sets for "</string>
+    <string name="toast_sensor_data_set_watering_slider_success_2">" sec"</string>
+    <string name="toast_sensor_data_set_sleep_mode_slider_success_1">"Sleep Mode for sensor successfully sets for "</string>
+    <string name="toast_sensor_data_set_sleep_mode_slider_success_2">" min"</string>
     <string name="toast_sensor_data_set_slider_failed">Something is wrong. Setting impossible</string>
-    <string name="toast_sensor_data_auto_watering_on">Automatic Watering successfully turn on</string>
-    <string name="toast_sensor_data_auto_watering_off">Automatic Watering turn off</string>
+    <string name="toast_sensor_data_auto_watering_on">Auto Watering successfully turn on</string>
+    <string name="toast_sensor_data_auto_watering_off">Auto Watering turn off</string>
     <string name="toast_sensor_data_auto_watering_error">Something is wrong. Setting impossible</string>
     <string name="toast_sensor_data_update_success">Sensor Data updated</string>
     <string name="toast_sensor_data_update_failed">Something is wrong. Updating impossible</string>
     <string name="toast_sensor_data_dialog_delete">Sensor deleted</string>
     <string name="toast_about_add_copied_success">Link successfully copied</string>
+    <string name="toast_sensor_data_auto_sleep_mode_on">Auto Sleep Mode successfully turn on</string>
+    <string name="toast_sensor_data_auto_sleep_mode_off">Auto Sleep Mode turn off</string>
 
 
     <string name="error_invalid_email">Please provide a valid email</string>
@@ -100,5 +111,6 @@
     <string name="about_app_btn_copy_link_description">Copy a link project</string>
     <string name="about_app_part_3">All details describe in Read.me file. Also all Arduino sketches with annotation on this link below:</string>
     <string name="about_app_link_arduino">https://github.com/aolikas/WaterYourPlantsAduino.git</string>
+
 
 </resources>

@@ -41,16 +41,20 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
 
     private TextView txtSensorId;
     private TextInputEditText etSensorName, etSensorDescription;
-    private Slider slWateringDuration;
-    private SwitchMaterial swAutomaticWatering;
+    private Slider slWateringDuration, slSleepModeTime;
+    private SwitchMaterial swAutoWatering, swAutoSleepMode;
+    private Button btnStartWatering;
 
     private DatabaseReference mRef;
 
     private ClipboardManager mClipboardManager;
 
     private String mKey;
-    private Float mSliderDuration;
+    private Float mSliderWateringDuration;
+    private Float mSliderSleepModeTime;
     private Boolean mSwitchSaveWateringState;
+    private Boolean mSwitchSaveAutoWateringState;
+    private Boolean mSwitchSaveAutoSleepModeState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +76,11 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
 
         mClipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
-        initSlider();
+        readSliderSleepModeTime();
+        readSliderWateringDuration();
 
-        initAutoWateringSwitch();
+        readAutoSleepModeSwitch();
+        readAutoWateringSwitch();
     }
 
     private void initWidget() {
@@ -82,18 +88,24 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
         etSensorDescription = findViewById(R.id.sensor_data_et_description);
         txtSensorId = findViewById(R.id.sensor_data_txt_id);
         slWateringDuration = findViewById(R.id.sensor_data_slider_duration);
-        swAutomaticWatering = findViewById(R.id.sensor_data_switch_auto_water);
+        swAutoWatering = findViewById(R.id.sensor_data_switch_water_auto);
         //  SwitchMaterial swNotifyCondition = findViewById(R.id.sensor_data_switch_notify_condition);
+
+        slSleepModeTime = findViewById(R.id.sensor_data_slider_sleep_mode_time);
+        swAutoSleepMode = findViewById(R.id.sensor_data_switch_sleep_mode_auto);
 
         Button btnCopy = findViewById(R.id.sensor_data_btn_copy);
         Button btnUpdate = findViewById(R.id.sensor_data_btn_update);
         Button btnDelete = findViewById(R.id.sensor_data_btn_delete);
+        btnStartWatering = findViewById(R.id.sensor_data_btn_water_start);
 
         btnCopy.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
+        btnStartWatering.setOnClickListener(this);
     }
 
+    // retrieve all current data from DB
     private void getSensorData() {
         mRef.child(mKey).addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,14 +117,38 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                     etSensorDescription.setText(userData.getUserSensorDescription());
                     txtSensorId.setText(mKey);
 
-                    mSwitchSaveWateringState = userData.getUserSensorPumpWateringAutomatic();
-                    swAutomaticWatering.setChecked(mSwitchSaveWateringState);
+                    //get and set data for Watering Duration Slider
+                    mSliderWateringDuration = userData.getUserSensorPumpWateringDuration();
+                    slWateringDuration.setValue(mSliderWateringDuration);
+
+                    //get and set data for Sleep Mode Time Slider
+                    mSliderSleepModeTime = userData.getUserSensorSleepModeTime();
+                    slSleepModeTime.setValue(mSliderSleepModeTime);
+
+                    // get and set value for Auto Sleep Mode Switch
+                    mSwitchSaveAutoSleepModeState = userData.getUserSensorSleepModeAutomatic();
+                    swAutoSleepMode.setChecked(mSwitchSaveAutoSleepModeState);
+                    // check if state is true, then btn Sleep Mode Time Slider is not clickable
+                    if(mSwitchSaveAutoSleepModeState) {
+                        slSleepModeTime.setEnabled(false);
+                    }
+
+                    // get and set value for Auto Watering Switch
+                    mSwitchSaveAutoWateringState = userData.getUserSensorPumpWateringAutomatic();
+                    swAutoWatering.setChecked(mSwitchSaveAutoWateringState);
+                    // check if state is true, then btn Start Watering is not clickable
+                    if(mSwitchSaveAutoWateringState) {
+                        btnStartWatering.setEnabled(false);
+                        btnStartWatering.setText(R.string.sensor_data_btn_start_watering_off);
+                    }
+
+                    // get data for Watering
+                    mSwitchSaveWateringState = userData.getUserSensorPumpWatering();
 
                     // mSwitchSaveNotifyState = userData.getUserSensorNotifyDryCondition();
                     //swNotifyCondition.setChecked(mSwitchSaveNotifyState);
 
-                    mSliderDuration = userData.getUserSensorPumpWateringDuration();
-                    slWateringDuration.setValue(mSliderDuration);
+
 
                     //   mMoistureCondition = userData.getUserSensorMoistureCondition();
                     // if(mSwitchSaveNotifyState && mMoistureCondition.equals("Dry")) {
@@ -134,37 +170,132 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    private void initSlider() {
-        slWateringDuration.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+    // read slider value(float) and send it to DB
+    private void readSliderSleepModeTime() {
+        slSleepModeTime.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
             @Override
             public void onStartTrackingTouch(@NonNull Slider slider) {
-                mSliderDuration = slider.getValue();
-                // Toast.makeText(SensorDataActivity.this, "Value Start" + mSliderDuration , Toast.LENGTH_SHORT).show();
+                mSliderSleepModeTime = slider.getValue();
             }
 
             @Override
             public void onStopTrackingTouch(@NonNull Slider slider) {
-                mSliderDuration = slider.getValue();
-                sendSliderDuration();
-                // Toast.makeText(SensorDataActivity.this, "Value Stop" + mSliderDuration , Toast.LENGTH_SHORT).show();
+                mSliderSleepModeTime = slider.getValue();
+                sendSliderSleepModeTime();
             }
         });
     }
 
-    private void initAutoWateringSwitch() {
-        swAutomaticWatering.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+    // read slider value(float) and send it to DB
+    private void readSliderWateringDuration() {
+        slWateringDuration.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@NonNull Slider slider) {
+                mSliderWateringDuration = slider.getValue();
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull Slider slider) {
+                mSliderWateringDuration = slider.getValue();
+                sendSliderWateringDuration();
+            }
+        });
+    }
+
+    // read Sleep Mode switch state and send value to DB
+    private void readAutoSleepModeSwitch() {
+        swAutoSleepMode.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             if (isChecked) {
-                mSwitchSaveWateringState = true;
+                mSwitchSaveAutoSleepModeState = true;
                 SharedPreferences.Editor editor
                         = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
-                editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveWateringState);
+                editor.putBoolean("SaveAutomaticSleepModeState", mSwitchSaveAutoSleepModeState);
                 editor.apply();
+
+                //if Auto Sleep Mode is on, slider becomes not clickable
+                slSleepModeTime.setEnabled(false);
 
                 UserData userData = new UserData(null,
                         null,
-                        null, mSwitchSaveWateringState,
-                        null);
+                        null,
+                        null,
+                        null,
+                        null,
+                        mSwitchSaveAutoSleepModeState);
+                Map<String, Object> dataUpdate = userData.toMapSensorSleepModeAutomatic();
+                mRef.child(mKey).updateChildren(dataUpdate)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(SensorDataActivity.this,
+                                        getString(R.string.toast_sensor_data_auto_sleep_mode_on),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SensorDataActivity.this,
+                                        getString(R.string.toast_sensor_data_auto_watering_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+            } else {
+                // Switch is off
+                mSwitchSaveAutoSleepModeState = false;
+                SharedPreferences.Editor editor
+                        = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
+                editor.putBoolean("SaveAutomaticSleepModeState", mSwitchSaveAutoSleepModeState);
+                editor.apply();
+
+                //if Auto Sleep Mode is off, slider becomes clickable
+                slSleepModeTime.setEnabled(true);
+
+                UserData userData = new UserData(null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        mSwitchSaveAutoSleepModeState);
+
+                Map<String, Object> dataUpdate = userData.toMapSensorSleepModeAutomatic();
+                mRef.child(mKey).updateChildren(dataUpdate)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(SensorDataActivity.this,
+                                        getString(R.string.toast_sensor_data_auto_sleep_mode_off),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SensorDataActivity.this,
+                                        getString(R.string.toast_sensor_data_auto_watering_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+
+        });
+    }
+
+    // read AutoWatering switch state and send value to DB
+    private void readAutoWateringSwitch() {
+        swAutoWatering.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                mSwitchSaveAutoWateringState = true;
+                SharedPreferences.Editor editor
+                        = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
+                editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveAutoWateringState);
+                editor.apply();
+
+                // if AutoWatering turn on, btn Start Watering is not clickable
+                btnStartWatering.setEnabled(false);
+                btnStartWatering.setText(R.string.sensor_data_btn_start_watering_off);
+
+                // create data to update DB
+                UserData userData = new UserData(null,
+                        null,
+                        null,
+                        null,
+                        mSwitchSaveAutoWateringState,
+                        null,null);
                 Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
+                // send new data to DB
                 mRef.child(mKey).updateChildren(dataUpdate)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
@@ -179,16 +310,27 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
                         });
 
             } else {
-                mSwitchSaveWateringState = false;
+                //Auto Watering Switch is off
+                mSwitchSaveAutoWateringState = false;
                 SharedPreferences.Editor editor
                         = getSharedPreferences("my.e.wateryourplants", MODE_PRIVATE).edit();
-                editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveWateringState);
+                editor.putBoolean("SaveAutomaticWateringState", mSwitchSaveAutoWateringState);
                 editor.apply();
 
+                // when switch is off, btn becomes clickable
+                btnStartWatering.setEnabled(true);
+                btnStartWatering.setText(R.string.sensor_data_btn_start_watering);
+
+                // create data to update DB
                 UserData userData = new UserData(null,
-                        null, null,
-                        mSwitchSaveWateringState, null);
+                        null,
+                        null,
+                        null,
+                        mSwitchSaveAutoWateringState,
+                        null,
+                        null);
                 Map<String, Object> dataUpdate = userData.toMapSensorWateringAutomatic();
+                // send new data to DB
                 mRef.child(mKey).updateChildren(dataUpdate)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
@@ -273,21 +415,77 @@ public class SensorDataActivity extends AppCompatActivity implements View.OnClic
             case R.id.sensor_data_btn_delete:
                 deleteSensor();
                 break;
+            case R.id.sensor_data_btn_water_start:
+                startWatering();
+                break;
         }
     }
 
-    private void sendSliderDuration() {
+    private void startWatering() {
+        mSwitchSaveWateringState = true;
         UserData userData = new UserData(null,
-                null, mSliderDuration,
-                null, null);
+                null,
+                null,
+                mSwitchSaveWateringState,
+                null,
+                null,null);
+        Map<String, Object> dataUpdate = userData.toMapSensorWatering();
+        mRef.child(mKey).updateChildren(dataUpdate).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(SensorDataActivity.this,
+                        "Watering is starting for " + mSliderWateringDuration,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(SensorDataActivity.this,
+                        getString(R.string.toast_sensor_data_auto_watering_error),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendSliderSleepModeTime() {
+        UserData userData = new UserData(null,
+                null,
+                null,
+                null,
+                null,
+                mSliderSleepModeTime,
+                null);
+
+        Map<String, Object> dataUpdate = userData.toMapSensorSleepModeTime();
+        mRef.child(mKey).updateChildren(dataUpdate)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(SensorDataActivity.this,
+                                (getString(R.string.toast_sensor_data_set_sleep_mode_slider_success_1)
+                                        + Math.round(mSliderSleepModeTime)
+                                        + getString(R.string.toast_sensor_data_set_sleep_mode_slider_success_2)),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(SensorDataActivity.this,
+                                getString(R.string.toast_sensor_data_set_slider_failed),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+    private void sendSliderWateringDuration() {
+        UserData userData = new UserData(null,
+                null,
+                 mSliderWateringDuration,
+                null,
+                null,
+                null,
+                null);
         Map<String, Object> dataUpdate = userData.toMapSensorWateringDuration();
         mRef.child(mKey).updateChildren(dataUpdate)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(SensorDataActivity.this,
-                                (getString(R.string.toast_sensor_data_set_slider_success_1)
-                                        + Math.round(mSliderDuration)
-                                        + getString(R.string.toast_sensor_data_set_slider_success_2)),
+                                (getString(R.string.toast_sensor_data_set_watering_slider_success_1)
+                                        + Math.round(mSliderWateringDuration)
+                                        + getString(R.string.toast_sensor_data_set_watering_slider_success_2)),
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(SensorDataActivity.this,

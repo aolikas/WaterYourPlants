@@ -45,13 +45,15 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="5dp"
                     android:text="@string/sensor_data_id_title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/sensor_data_txt_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:gravity="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                 <com.google.android.material.button.MaterialButton
@@ -61,10 +63,71 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginEnd="20dp"
                     android:text="@string/sensor_data_btn_copy_sensor_id"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <TextView
+                    android:id="@+id/sensor_data_txt_sleep_mode_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/sensor_data_sleep_mode_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/sensor_data_sleep_mode_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="@string/sensor_data_sleep_mode_description"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sensor_data_slider_sleep_mode_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:stepSize="5.0"
+                    android:valueFrom="5.0"
+                    android:valueTo="60.0" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:id="@+id/sensor_data_sleep_mode_auto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/sensor_data_sleep_mode_auto"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/sensor_data_switch_sleep_mode_auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="20dp"
+                        app:useMaterialThemeColors="false"
+                        app:thumbTint="@color/orange"
+                        app:trackTint="@color/gray_dark"
+                        android:checked="true"/>
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -112,24 +175,38 @@
                     android:valueFrom="5.0"
                     android:valueTo="30.0" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/sensor_data_btn_water_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cornerRadius="15dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="@string/sensor_data_btn_start_watering"
+                    android:textAllCaps="true"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:textColor="@color/dark"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp">
                     <TextView
-                        android:id="@+id/sensor_data_watering_automatic"
+                        android:id="@+id/sensor_data_watering_auto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginStart="15dp"
-                        android:text="@string/sensor_data_watering_automatic"
+                        android:text="@string/sensor_data_watering_auto"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/sensor_data_switch_auto_water"
+                        android:id="@+id/sensor_data_switch_water_auto"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"

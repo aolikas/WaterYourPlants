@@ -13,7 +13,10 @@ public class UserData {
     private String userSensorMoistureCondition;
     private Float userSensorTemperature;
     private Float userSensorPumpWateringDuration;
+    private Float userSensorSleepModeTime;
     private Boolean userSensorPumpWateringAutomatic;
+    private Boolean userSensorPumpWatering;
+    private Boolean userSensorSleepModeAutomatic;
     private Boolean userSensorNotifyDryCondition;
 
 
@@ -31,15 +34,20 @@ public class UserData {
         this.userSensorMoistureCondition = userSensorMoistureCondition;
     }
 
-
-    public UserData(String userSensorName, String userSensorDescription
-            , Float userSensorPumpWateringDuration, Boolean userSensorPumpWateringAutomatic,
-                    Boolean userSensorNotifyDryCondition) {
+    public UserData(String userSensorName,
+                    String userSensorDescription,
+                    Float userSensorPumpWateringDuration,
+                    Boolean userSensorPumpWatering,
+                    Boolean userSensorPumpWateringAutomatic,
+                    Float userSensorSleepModeTime,
+                    Boolean userSensorSleepModeAutomatic) {
         this.userSensorName = userSensorName;
         this.userSensorDescription = userSensorDescription;
         this.userSensorPumpWateringDuration = userSensorPumpWateringDuration;
+        this.userSensorPumpWatering = userSensorPumpWatering;
         this.userSensorPumpWateringAutomatic = userSensorPumpWateringAutomatic;
-        this.userSensorNotifyDryCondition = userSensorNotifyDryCondition;
+        this.userSensorSleepModeTime = userSensorSleepModeTime;
+        this.userSensorSleepModeAutomatic = userSensorSleepModeAutomatic;
     }
 
     public String getUserName() {
@@ -106,6 +114,30 @@ public class UserData {
         this.userSensorPumpWateringAutomatic = userSensorPumpWateringAutomatic;
     }
 
+    public Boolean getUserSensorPumpWatering() {
+        return userSensorPumpWatering;
+    }
+
+    public void setUserSensorPumpWatering(Boolean userSensorPumpWatering) {
+        this.userSensorPumpWatering = userSensorPumpWatering;
+    }
+
+    public Float getUserSensorSleepModeTime() {
+        return userSensorSleepModeTime;
+    }
+
+    public void setUserSensorSleepModeTime(Float userSensorSleepModeTime) {
+        this.userSensorSleepModeTime = userSensorSleepModeTime;
+    }
+
+    public Boolean getUserSensorSleepModeAutomatic() {
+        return userSensorSleepModeAutomatic;
+    }
+
+    public void setUserSensorSleepModeAutomatic(Boolean userSensorSleepModeAutomatic) {
+        this.userSensorSleepModeAutomatic = userSensorSleepModeAutomatic;
+    }
+
     public Boolean getUserSensorNotifyDryCondition() {
         return userSensorNotifyDryCondition;
     }
@@ -138,9 +170,30 @@ public class UserData {
     }
 
     @Exclude
+    public Map<String, Object> toMapSensorSleepModeTime() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userSensorSleepModeTime", userSensorSleepModeTime);
+        return result;
+    }
+
+    @Exclude
+    public Map<String, Object> toMapSensorWatering() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userSensorPumpWatering", userSensorPumpWatering);
+        return result;
+    }
+
+    @Exclude
     public Map<String, Object> toMapSensorWateringAutomatic() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("userSensorPumpWateringAutomatic", userSensorPumpWateringAutomatic);
+        return result;
+    }
+
+    @Exclude
+    public Map<String, Object> toMapSensorSleepModeAutomatic() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userSensorSleepModeAutomatic", userSensorSleepModeAutomatic);
         return result;
     }
 

@@ -55,7 +55,7 @@ public class SensorDataActivityTest {
     public void setUp() {
         email = "test@test.ru";
         password = "1234567";
-        sensorId = "-M_Fpm5kjh8rKvuvyFyU";
+        sensorId = "-MgLXWoCs5qOxJ5G2JkP";
         sensorName  = "This is a sensor name";
         sensorDescription = "This is a sensor description";
     }
@@ -111,7 +111,20 @@ public class SensorDataActivityTest {
                 .check(matches(withText(R.string.sensor_data_btn_copy_sensor_id)))
                 .check(matches(isDisplayed()));
 
-        Thread.sleep(2000);
+        onView(withId(R.id.sensor_data_txt_sleep_mode_title))
+                .check(matches(withText(R.string.sensor_data_sleep_mode_title)))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.sensor_data_sleep_mode_description))
+                .check(matches(withText(R.string.sensor_data_sleep_mode_description)))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.sensor_data_sleep_mode_auto))
+                .check(matches(withText(R.string.sensor_data_sleep_mode_auto)))
+                .check(matches(isDisplayed()));
+
+
+        Thread.sleep(5000);
 
         // checking all Views in Watering card for matching text string
         onView(withId(R.id.sensor_data_watering_card_title))
@@ -122,34 +135,32 @@ public class SensorDataActivityTest {
                 .check(matches(withText(R.string.sensor_data_watering_duration)))
                 .check(matches(isDisplayed()));
 
-        onView(withId(R.id.sensor_data_watering_automatic))
-                .check(matches(withText(R.string.sensor_data_watering_automatic)))
+        onView(withId(R.id.sensor_data_watering_auto))
+                .check(matches(withText(R.string.sensor_data_watering_auto)))
                 .check(matches(isDisplayed()));
 
-        onView(withId(R.id.sensor_data_watering_notify))
-                .check(matches(withText(R.string.sensor_data_watering_notify)))
-                .check(matches(isDisplayed()));
 
         Thread.sleep(2000);
 
         // checking all Views in Editing card for matching text string
-        onView(withId(R.id.sensor_data_editing_card_title))
+        onView(withId(R.id.sensor_data_editing_card_title)).perform(scrollTo())
                 .check(matches(withText(R.string.sensor_data_editing_title)))
                 .check(matches(isDisplayed()));
 
-        onView(withId(R.id.sensor_data_et_name))
+
+        onView(withId(R.id.sensor_data_et_name)).perform(scrollTo())
                 .check(matches(withText(sensorName)))
                 .check(matches(isDisplayed()));
 
-        onView(withId(R.id.sensor_data_et_description))
+        onView(withId(R.id.sensor_data_et_description)).perform(scrollTo())
                 .check(matches(withText(sensorDescription)))
                 .check(matches(isEnabled()));
 
-        onView(withId(R.id.sensor_data_btn_update))
+        onView(withId(R.id.sensor_data_btn_update)).perform(scrollTo())
                 .check(matches(withText(R.string.sensor_data_btn_update)))
                 .check(matches(isEnabled()));
 
-        onView(withId(R.id.sensor_data_btn_delete))
+        onView(withId(R.id.sensor_data_btn_delete)).perform(scrollTo())
                 .check(matches(withText(R.string.sensor_data_btn_delete)))
                 .check(matches(isEnabled()));
 
@@ -296,13 +307,13 @@ public class SensorDataActivityTest {
                 perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         // switch button off
-        onView(withId(R.id.sensor_data_switch_auto_water)).perform(setChecked());
+        onView(withId(R.id.sensor_data_switch_water_auto)).perform(setChecked());
 
         // check for a state
-        onView(withId(R.id.sensor_data_switch_auto_water)).check(matches(isNotChecked()));
+        onView(withId(R.id.sensor_data_switch_water_auto)).check(matches(isNotChecked()));
 
         // click to turn on
-        onView(withId(R.id.sensor_data_switch_auto_water)).perform(click());
+        onView(withId(R.id.sensor_data_switch_water_auto)).perform(click());
 
         // check Toast - turn on auto watering
         onView(withText(R.string.toast_sensor_data_auto_watering_on)).inRoot(new ToastMatcher())
@@ -313,10 +324,10 @@ public class SensorDataActivityTest {
         Thread.sleep(2000);
 
         // checking a state for a true
-        onView(withId(R.id.sensor_data_switch_auto_water)).check(matches(isChecked()));
+        onView(withId(R.id.sensor_data_switch_water_auto)).check(matches(isChecked()));
 
         // click on button
-        onView(withId(R.id.sensor_data_switch_auto_water))
+        onView(withId(R.id.sensor_data_switch_water_auto))
                 .perform(click()).check(matches(isEnabled()));
 
         // check Toast - turn off auto watering
@@ -364,13 +375,13 @@ public class SensorDataActivityTest {
                 perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         // switch button off
-        onView(withId(R.id.sensor_data_switch_auto_water)).perform(setChecked());
+        onView(withId(R.id.sensor_data_switch_water_auto)).perform(setChecked());
 
         // check for a state
-        onView(withId(R.id.sensor_data_switch_auto_water)).check(matches(isNotChecked()));
+        onView(withId(R.id.sensor_data_switch_water_auto)).check(matches(isNotChecked()));
 
         // click to turn on
-        onView(withId(R.id.sensor_data_switch_auto_water)).perform(click());
+        onView(withId(R.id.sensor_data_switch_water_auto)).perform(click());
 
         // check Toast - turn on auto watering
         onView(withText(R.string.toast_sensor_data_auto_watering_on)).inRoot(new ToastMatcher())
@@ -381,10 +392,10 @@ public class SensorDataActivityTest {
         Thread.sleep(2000);
 
         // checking a state for a true
-        onView(withId(R.id.sensor_data_switch_auto_water)).check(matches(isChecked()));
+        onView(withId(R.id.sensor_data_switch_water_auto)).check(matches(isChecked()));
 
         // click on button
-        onView(withId(R.id.sensor_data_switch_auto_water))
+        onView(withId(R.id.sensor_data_switch_water_auto))
                 .perform(click()).check(matches(isEnabled()));
 
         // check Toast - turn off auto watering
