@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="my.e.wateryourplants">
+    package="my.aolika.wateryourplants">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.WaterYourPlants">
-        <activity android:name=".showDetails.AboutAppActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".introSlide.IntroActivity">
+        <activity android:name="my.aolika.wateryourplants.showDetails.AboutAppActivity"
+            android:parentActivityName="my.aolika.wateryourplants.MainActivity"/>
+        <activity android:name="my.aolika.wateryourplants.introSlide.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".showDetails.SensorDataActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name="my.aolika.wateryourplants.showDetails.SensorDataActivity"
+            android:parentActivityName="my.aolika.wateryourplants.MainActivity" />
         <activity
-            android:name=".showDetails.UserAccountActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name="my.aolika.wateryourplants.showDetails.UserAccountActivity"
+            android:parentActivityName="my.aolika.wateryourplants.MainActivity" />
         <activity
-            android:name=".auth.ResetPasswordActivity"
-            android:parentActivityName=".auth.StartActivity" />
+            android:name="my.aolika.wateryourplants.auth.ResetPasswordActivity"
+            android:parentActivityName="my.aolika.wateryourplants.auth.StartActivity" />
         <activity
-            android:name=".auth.RegistrationActivity"
-            android:parentActivityName=".auth.StartActivity" />
+            android:name="my.aolika.wateryourplants.auth.RegistrationActivity"
+            android:parentActivityName="my.aolika.wateryourplants.auth.StartActivity" />
         <activity
-            android:name=".auth.LoginActivity"
-            android:parentActivityName=".auth.StartActivity" />
-        <activity android:name=".auth.StartActivity"/>
-        <activity android:name=".MainActivity" />
+            android:name="my.aolika.wateryourplants.auth.LoginActivity"
+            android:parentActivityName="my.aolika.wateryourplants.auth.StartActivity" />
+        <activity android:name="my.aolika.wateryourplants.auth.StartActivity"/>
+        <activity android:name="my.aolika.wateryourplants.MainActivity" />
     </application>
 
 </manifest>

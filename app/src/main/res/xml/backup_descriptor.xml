@@ -13,8 +13,8 @@
         path="pref.xml" />
     <exclude
         domain="sharedpref"
-        path="my.e.wateryourplants.introSlide.xml" />
+        path="my.aolika.wateryourplants.introSlide.xml" />
     <exclude
         domain="sharedpref"
-        path="my.e.wateryourplants.xml" />
+        path="my.aolika.wateryourplants.xml" />
 </full-backup-content>
